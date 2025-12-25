@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jengaflow - Powering the Construction Revolution</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- General Styles & Resets --- */
+        :root {
+            --primary-color: #005f73; /* Deep Teal */
+            --secondary-color: #0a9396; /* Light Teal */
+            --accent-color: #ee9b00; /* Orange/Yellow */
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --grey-color: #6c757d;
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: 3.5rem; color: #fff; }
+        h2 { font-size: 2.5rem; text-align: center; margin-bottom: 2rem; color: var(--primary-color);}
+        h3 { font-size: 1.5rem; }
+        p { margin-bottom: 1rem; }
+        ul { list-style: none; }
+        a { text-decoration: none; color: var(--primary-color); }
+        img { max-width: 100%; display: block; }
+
+        section {
+            padding: 5rem 0;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
+            color: var(--grey-color);
+            font-size: 1.1rem;
+        }
+
+        /* --- Loading Screen --- */
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .loader-logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .loader-logo span {
+            color: var(--accent-color);
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            height: 100%;
+            width: 0;
+            background-color: var(--accent-color);
+            animation: loading 2s ease-in-out forwards;
+        }
+
+        @keyframes loading {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Animations --- */
+        .animate-on-scroll {
+            opacity: 0;
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0) translateX(0);
+        }
+        
+        .animate-on-scroll.slide-in-left {
+            transform: translateX(-50px);
+        }
+        
+        .animate-on-scroll.slide-in-right {
+            transform: translateX(50px);
+        }
+        
+        .animate-on-scroll.slide-in-bottom {
+            transform: translateY(30px);
+        }
+        
+        .animate-on-scroll.stagger-1 { transition-delay: 0.1s; }
+        .animate-on-scroll.stagger-2 { transition-delay: 0.2s; }
+        .animate-on-scroll.stagger-3 { transition-delay: 0.3s; }
+        .animate-on-scroll.stagger-4 { transition-delay: 0.4s; }
+        .animate-on-scroll.stagger-5 { transition-delay: 0.5s; }
+
+        /* --- Header & Navigation --- */
+        .main-header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            transition: var(--transition-bounce);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: var(--secondary-color);
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .main-nav ul {
+            display: flex;
+        }
+
+        .main-nav a {
+            color: var(--dark-color);
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 5px;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+
+        .main-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: var(--transition-smooth);
+            transform: translateX(-50%);
+        }
+
+        .main-nav a:hover::after {
+            width: 80%;
+        }
+
+        .nav-toggle {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            transition: var(--transition-bounce);
+        }
+        
+        .nav-toggle:hover {
+            color: var(--accent-color);
+            transform: rotate(90deg);
+        }
+
+        /* --- Hero Section --- */
+        #hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070') no-repeat center center/cover;
+            height: 100vh;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin-top: 70px;
+        }
+
+        #hero .container {
+            max-width: 800px;
+        }
+
+        #hero h1 {
+            margin-bottom: 1rem;
+        }
+
+        #hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2.5rem;
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition-smooth);
+            box-shadow: 0 4px 15px rgba(238, 155, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background: #d68910;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(238, 155, 0, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+        
+        .btn-outline::before {
+            background: var(--accent-color);
+        }
+
+        .btn-outline:hover {
+            color: #fff;
+        }
+
+        /* --- Section: Problem --- */
+        #problem {
+            background-color: var(--light-color);
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            text-align: center;
+        }
+
+        .problem-item {
+            background: #fff;
+            padding: 2rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent-color);
+            transition: var(--transition-smooth);
+        }
+        
+        .problem-item:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-left-color: var(--primary-color);
+        }
+
+        .problem-item h3 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            transition: var(--transition-smooth);
+        }
+        
+        .problem-item:hover h3 {
+            color: var(--accent-color);
+        }
+
+        /* --- Section: Solution & Features --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: #fff;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition-smooth);
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--secondary-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .feature-card .icon {
+            font-size: 3.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            transition: var(--transition-bounce);
+        }
+        
+        .feature-card:hover .icon {
+            color: var(--accent-color);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* --- Section: The Ecosystem --- */
+        #ecosystem {
+            background: linear-gradient(rgba(0, 95, 115, 0.85), rgba(10, 147, 150, 0.85)), url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070') no-repeat center center/cover;
+            color: #fff;
+        }
+        
+        #ecosystem h2 {
+            color: #fff;
+        }
+
+        #ecosystem .section-subtitle {
+            color: #e0e0e0;
+        }
+
+        .ecosystem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .ecosystem-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition-smooth);
+        }
+
+        .ecosystem-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .ecosystem-item h3 { font-size: 1.3rem; }
+        .ecosystem-item .icon { font-size: 3rem; color: var(--accent-color); transition: var(--transition-bounce); }
+        .ecosystem-item:hover .icon { transform: scale(1.2); }
+
+        /* --- Section: Market Opportunity --- */
+        #market-opportunity {
+            background: linear-gradient(rgba(33, 37, 41, 0.9), rgba(33, 37, 41, 0.9)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070') no-repeat center center/cover;
+            color: #fff;
+            text-align: center;
+        }
+        
+        #market-opportunity h2 {
+            color: #fff;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .stat-item {
+            padding: 1rem;
+            transition: var(--transition-bounce);
+        }
+        
+        .stat-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .stat-item .number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+        }
+        
+        .stat-item .label {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- Section: Business Model --- */
+        #business-model {
+            background-color: var(--light-color);
+        }
+
+        .revenue-streams {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .revenue-stream {
+            background: #fff;
+            color: var(--primary-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .revenue-stream::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--accent-color);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+            z-index: 0;
+        }
+        
+        .revenue-stream span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .revenue-stream:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .revenue-stream:hover {
+            color: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- Section: Patent Information --- */
+        #patent {
+            background-color: #fff;
+        }
+
+        .patent-content {
+            background: var(--light-color);
+            padding: 2rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--accent-color);
+            transition: var(--transition-smooth);
+        }
+        
+        .patent-content:hover {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transform: translateX(10px);
+        }
+
+        .patent-number {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* --- Section: Team --- */
+        #team {
+            background-color: var(--light-color);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: var(--transition-smooth);
+        }
+
+        .team-member:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .team-member-img {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .team-member-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: var(--transition-smooth);
+        }
+        
+        .team-member:hover .team-member-img img {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+
+        .team-member-info {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .team-member h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .team-member p {
+            margin-bottom: 1rem;
+            color: var(--grey-color);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 36px;
+            height: 36px;
+            background-color: var(--light-color);
+            color: var(--primary-color);
+            border-radius: 50%;
+            transition: var(--transition-bounce);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        /* --- Section: Testimonials --- */
+        #testimonials {
+            background-color: #fff;
+        }
+
+        .testimonials-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .testimonial {
+            background: var(--light-color);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+        
+        .testimonial:hover {
+            transform: translateX(10px);
+            box-shadow: -10px 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .testimonial::before {
+            content: """;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 80px;
+            color: var(--accent-color);
+            opacity: 0.3;
+        }
+
+        .testimonial-text {
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+        
+        .author-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            margin-bottom: 0.2rem;
+            color: var(--primary-color);
+        }
+
+        .author-info p {
+            margin: 0;
+            color: var(--grey-color);
+            font-size: 0.9rem;
+        }
+
+        /* --- Section: FAQ --- */
+        #faq {
+            background-color: var(--light-color);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: var(--transition-smooth);
+        }
+        
+        .faq-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-smooth);
+        }
+        
+        .faq-question:hover {
+            background-color: var(--light-color);
+        }
+
+        .faq-question i {
+            transition: var(--transition-bounce);
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 1.5rem 1.5rem;
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        /* --- Section: The Ask --- */
+        #the-ask {
+            background-color: var(--primary-color);
+            color: #fff;
+            text-align: center;
+        }
+
+        #the-ask h2 {
+            color: #fff;
+        }
+
+        #the-ask p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+        }
+        
+        .ask-details {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            transition: var(--transition-smooth);
+        }
+        
+        .ask-details:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.02);
+        }
+        
+        .ask-details h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .ask-details ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Footer --- */
+        .main-footer {
+            background: var(--dark-color);
+            color: #fff;
+            padding: 3rem 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-column a {
+            color: #bbb;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+        
+        .footer-column a::before {
+            content: '→';
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .footer-column a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+        
+        .footer-column a:hover::before {
+            opacity: 1;
+            left: -10px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            color: #bbb;
+        }
+
+        /* --- Contact Modal --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--grey-color);
+            transition: var(--transition-bounce);
+        }
+
+        .close-modal:hover {
+            color: var(--dark-color);
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: var(--transition-smooth);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 95, 115, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* --- Back to Top Button --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-smooth);
+            z-index: 1000;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-5px);
+        }
+        
+        /* --- Responsive Design --- */
+        @media (max-width: 992px) {
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            #hero h1 { font-size: 2.8rem; }
+
+            .main-nav {
+                position: fixed;
+                top: 0;
+                right: -300px;
+                width: 300px;
+                height: 100vh;
+                background: #fff;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+                transition: right 0.3s ease;
+                z-index: 999;
+            }
+
+            .main-header.nav-open .main-nav {
+                right: 0;
+            }
+
+            .main-nav ul {
+                flex-direction: column;
+                padding-top: 5rem;
+            }
+            
+            .main-nav a {
+                display: block;
+                padding: 1rem 2rem;
+                border-bottom: 1px solid var(--light-color);
+            }
+
+            .nav-toggle {
+                display: block;
+                z-index: 1001;
+            }
+        }
+
+        @media (max-width: 576px) {
+            section {
+                padding: 3rem 0;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.8rem; }
+            #hero h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader-wrapper">
+        <div class="loader">
+            <div class="loader-logo">JENGA<span>FLOW</span></div>
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <a href="#hero" class="logo">JENGA<span>FLOW</span></a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#problem">The Problem</a></li>
+                    <li><a href="#solution">The Solution</a></li>
+                    <li><a href="#ecosystem">Ecosystem</a></li>
+                    <li><a href="#patent">Patent</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#the-ask">Invest</a></li>
+                    <li><a href="#" id="contact-btn">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="nav-toggle" id="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero">
+            <div class="container">
+                <h1 class="animate-on-scroll slide-in-bottom">Powering Construction Revolution</h1>
+                <p class="animate-on-scroll slide-in-bottom">Connecting workers, developers, materials, finance & AI planning in real-time. One platform instead of chaos.</p>
+                <div class="animate-on-scroll slide-in-bottom">
+                    <a href="#the-ask" class="btn">Join the Revolution</a>
+                    <a href="#solution" class="btn btn-outline" style="margin-left: 1rem;">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section id="problem" class="container">
+            <h2 class="animate-on-scroll slide-in-bottom">The Problem We Are Solving</h2>
+            <p class="section-subtitle animate-on-scroll slide-in-bottom">Construction today is broken and inefficient. This leads to costly and dangerous outcomes.</p>
+            <div class="problem-grid">
+                <div class="problem-item animate-on-scroll slide-in-left stagger-1">
+                    <h3>🔍 Lack of Transparency</h3>
+                    <p>No real-time tracking of site progress, finances, or procurement.</p>
+                </div>
+                <div class="problem-item animate-on-scroll slide-in-right stagger-2">
+                    <h3>💼 Inefficient Job Access</h3>
+                    <p>No mechanism for workers to find jobs on remote sites.</p>
+                </div>
+                <div class="problem-item animate-on-scroll slide-in-left stagger-3">
+                    <h3>📉 No Accountability</h3>
+                    <p>Poor rating systems lead to low quality work and fraud.</p>
+                </div>
+                <div class="problem-item animate-on-scroll slide-in-right stagger-4">
+                    <h3>📈 Costly Planning</h3>
+                    <p>Architectural and planning services are slow and expensive.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution Section -->
+        <section id="solution" class="container">
+            <h2 class="animate-on-scroll slide-in-bottom">The Solution – Jengaflow</h2>
+            <p class="section-subtitle animate-on-scroll slide-in-bottom">An all-in-one construction management platform that brings the entire ecosystem into one seamless, transparent, and efficient digital space.</p>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="container">
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll slide-in-left stagger-1">
+                    <div class="icon">🗺️</div>
+                    <h3>Site & Labour Management</h3>
+                    <p>Map ongoing construction sites and show real-time labour size & open slots. Workers find jobs, developers find talent.</p>
+                </div>
+                <div class="feature-card animate-on-scroll slide-in-right stagger-2">
+                    <div class="icon">📊</div>
+                    <h3>Developer Dashboard</h3>
+                    <p>Live tracking of timelines, budgets & materials. Ensure your project is on time and on budget.</p>
+                </div>
+                <div class="feature-card animate-on-scroll slide-in-left stagger-3">
+                    <div class="icon">🤖</div>
+                    <h3>Jengaflow AI</h3>
+                    <p>Auto-generate professional flow plans and architectural designs in minutes, not weeks.</p>
+                </div>
+                <div class="feature-card animate-on-scroll slide-in-right stagger-4">
+                    <div class="icon">⭐</div>
+                    <h3>Ratings & Trust</h3>
+                    <p>Rate contractors, engineers & fundis based on real projects. Build a reputation for quality.</p>
+                </div>
+                <div class="feature-card animate-on-scroll slide-in-bottom stagger-5">
+                    <div class="icon">💰</div>
+                    <h3>Financial Tracking</h3>
+                    <p>Promote financial & procurement transparency to eliminate fraud and cost overruns.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Ecosystem Section -->
+        <section id="ecosystem">
+            <div class="container">
+                <h2 class="animate-on-scroll slide-in-bottom">Beyond Construction: The Ecosystem</h2>
+                <p class="section-subtitle animate-on-scroll slide-in-bottom">Jengaflow integrates into housing, real estate, and supply chains, creating a comprehensive market.</p>
+                <div class="ecosystem-grid">
+                    <div class="ecosystem-item animate-on-scroll slide-in-left stagger-1">
+                        <div class="icon">🏡</div>
+                        <h3>Find a House</h3>
+                        <p>Rental listings linked to verified construction data for quality assurance.</p>
+                    </div>
+                    <div class="ecosystem-item animate-on-scroll slide-in-bottom stagger-2">
+                        <div class="icon">🏗️</div>
+                        <h3>Jengaflow Markets</h3>
+                        <p>Remote scanning of construction material markets and prices for best deals.</p>
+                    </div>
+                    <div class="ecosystem-item animate-on-scroll slide-in-right stagger-3">
+                        <div class="icon">📍</div>
+                        <h3>List Your Land</h3>
+                        <p>Agencies and land owners can directly list their land for potential buyers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Opportunity Section -->
+        <section id="market-opportunity">
+            <div class="container">
+                <h2 class="animate-on-scroll slide-in-bottom">Market Opportunity</h2>
+                <p class="section-subtitle animate-on-scroll slide-in-bottom">The Kenyan construction sector is ripe for digital disruption.</p>
+                <div class="stats-grid">
+                    <div class="stat-item animate-on-scroll slide-in-left stagger-1">
+                        <div class="number">Multi-Billion</div>
+                        <div class="label">Shilling Sector</div>
+                    </div>
+                    <div class="stat-item animate-on-scroll slide-in-bottom stagger-2">
+                        <div class="number">Millions</div>
+                        <div class="label">of Workers</div>
+                    </div>
+                    <div class="stat-item animate-on-scroll slide-in-right stagger-3">
+                        <div class="number">Thousands</div>
+                        <div class="label">of Developers</div>
+                    </div>
+                    <div class="stat-item animate-on-scroll slide-in-left stagger-4">
+                        <div class="number">0%</div>
+                        <div class="label">Dominant Platform</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Business Model Section -->
+        <section id="business-model" class="container">
+            <h2 class="animate-on-scroll slide-in-bottom">Scalable Business Model</h2>
+            <p class="section-subtitle animate-on-scroll slide-in-bottom">Multiple revenue streams ensure growth as platform usage increases.</p>
+            <div class="revenue-streams">
+                <span class="revenue-stream animate-on-scroll stagger-1"><span>💳 Subscriptions</span></span>
+                <span class="revenue-stream animate-on-scroll stagger-2"><span>🤖 AI Planning Tools</span></span>
+                <span class="revenue-stream animate-on-scroll stagger-3"><span>💼 Job & Procurement Commission</span></span>
+                <span class="revenue-stream animate-on-scroll stagger-4"><span>📢 Featured Listings & Ads</span></span>
+                <span class="revenue-stream animate-on-scroll stagger-5"><span>🔄 Transaction Fees</span></span>
+            </div>
+        </section>
+
+        <!-- Patent Information Section -->
+        <section id="patent" class="container">
+            <h2 class="animate-on-scroll slide-in-bottom">Patent Information</h2>
+            <p class="section-subtitle animate-on-scroll slide-in-bottom">Our innovative approach to construction management is protected by intellectual property.</p>
+            <div class="patent-content animate-on-scroll slide-in-right">
+                <p><span class="patent-number">Provisional Patent Application:</span> Construction Sector Management System and Method Thereof</p>
+                <p><span class="patent-number">Applicants:</span> Meru University of Science and Technology and Bonface Kinyanjui Wanjiku</p>
+                <p><span class="patent-number">Inventor:</span> Bonface Kinyanjui Wanjiku</p>
+                <p><span class="patent-number">Date Filed:</span> January 3, 2025</p>
+                <p>Our patent covers the comprehensive web-based platform system for managing the construction sector, designed to enhance efficiency, transparency, and accountability through real-time project monitoring, contractor and workforce management, financial tracking, procurement management, and performance ratings.</p>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team" class="container">
+            <h2 class="animate-on-scroll slide-in-bottom">Meet Our Team</h2>
+            <p class="section-subtitle animate-on-scroll slide-in-bottom">The visionaries behind Jengaflow's construction revolution.</p>
+            <div class="team-grid">
+                <div class="team-member animate-on-scroll slide-in-left">
+                    <div class="team-member-img">
+                       
+                    </div>
+                    <div class="team-member-info">
+                        <h3>Bonface K. Wanjiku</h3>
+                        <p>Founder & CEO</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="mailto:wanjikubonfacefx@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member animate-on-scroll slide-in-bottom">
+                    <div class="team-member-img">
+                        
+                    </div>
+                    <div class="team-member-info">
+                        <h3>Vincent Muthiani</h3>
+                        <p>Backend Developer</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="mailto:vincentmuthiani291@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member animate-on-scroll slide-in-right">
+                    <div class="team-member-img">
+                       
+                    </div>
+                    <div class="team-member-info">
+                        <h3>Philip Muuo</h3>
+                        <p>Frontend Developer</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="mailto:p5062e@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="container">
+            <h2 class="animate-on-scroll slide-in-bottom">What People Are Saying</h2>
+            <p class="section-subtitle animate-on-scroll slide-in-bottom">Early feedback from industry professionals.</p>
+            <div class="testimonials-container">
+                <div class="testimonial animate-on-scroll slide-in-left">
+                    <p class="testimonial-text">"The architecture behind Jengaflow is solid. The integration of real-time data with a scalable backend is exactly what's needed to handle the complexities of the construction sector. This is a game-changer."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img"><img src="" alt="Muthoki nthenya"></div>
+                        <div class="author-info">
+                            <h4>Muthoki nthenya</h4>
+                            <p>Tech Lead, Nairobi Tech Hub</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial animate-on-scroll slide-in-right">
+                    <p class="testimonial-text">"I've seen countless projects fail due to miscommunication and lack of transparency. Jengaflow directly tackles these issues. The platform's potential to streamline operations and build trust is immense."</p>
+                    <div class="testimonial-author">
+                        <div class="author-img"><img src="https://uwezakenya.org/wp-content/uploads/2022/12/Muuo-term2.jpg" alt="Maina isaac"></div>
+                        <div class="author-info">
+                            <h4>Maina isaac</h4>
+                            <p>Construction Site Manager, Nakuru</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="container">
+            <h2 class="animate-on-scroll slide-in-bottom">Frequently Asked Questions</h2>
+            <p class="section-subtitle animate-on-scroll slide-in-bottom">Answers to common questions about Jengaflow.</p>
+            <div class="faq-container">
+                <div class="faq-item animate-on-scroll slide-in-left">
+                    <div class="faq-question">
+                        <span>How does Jengaflow ensure data security?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Jengaflow uses industry-standard encryption and security protocols to protect all user data. We also implement strict access controls and regular security audits to ensure the highest level of data protection.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll slide-in-right">
+                    <div class="faq-question">
+                        <span>Is Jengaflow available outside of Kenya?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>While our initial focus is on the Kenyan market, we plan to expand to other East African countries and eventually globally. Our platform is designed to be adaptable to different construction industries and regulations.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll slide-in-left">
+                    <div class="faq-question">
+                        <span>How does the AI planning feature work?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Our AI planning tool uses machine learning algorithms to analyze project requirements and generate optimized construction plans and architectural designs. It takes into account factors like budget, timeline, materials, and local regulations to create efficient project plans.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Ask Section -->
+        <section id="the-ask">
+            <div class="container">
+                <h2 class="animate-on-scroll slide-in-bottom">The Ask: Angel Investment</h2>
+                <p class="animate-on-scroll slide-in-bottom">We are seeking angel investment to build our MVP and launch Jengaflow, transforming the future of construction in Kenya and beyond.</p>
+                <div class="ask-details animate-on-scroll slide-in-bottom">
+                    <h3>Use of Funds</h3>
+                    <ul>
+                        <li>✔ Build core MVP modules</li>
+                        <li>✔ Acquire necessary machines & tools</li>
+                        <li>✔ Assemble technical & industry collaborators</li>
+                        <li>✔ Pilot on real construction sites</li>
+                    </ul>
+                </div>
+                <div class="animate-on-scroll slide-in-bottom">
+                    <a href="mailto:wanjikubonfacefx@gmail.com" class="btn" style="margin-top: 2rem;">Contact Founder</a>
+                    <a href="#" id="invest-btn" class="btn btn-outline" style="margin-top: 2rem; margin-left: 1rem;">Invest Now</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Jengaflow</h3>
+                    <p>Powering the construction revolution through technology, transparency, and efficiency.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#problem">The Problem</a></li>
+                        <li><a href="#solution">The Solution</a></li>
+                        <li><a href="#ecosystem">Ecosystem</a></li>
+                        <li><a href="#patent">Patent</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="mailto:wanjikubonfacefx@gmail.com">wanjikubonfacefx@gmail.com</a></li>
+                        <li><a href="tel:+254718868880">+254 718 868 880</a></li>
+                        <li><a href="#">www.jengaflow.com</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Jengaflow. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contact Modal -->
+    <div class="modal" id="contact-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.loader-wrapper').style.opacity = '0';
+                setTimeout(() => {
+                    document.querySelector('.loader-wrapper').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('nav-toggle');
+        const mainHeader = document.querySelector('.main-header');
+
+        navToggle.addEventListener('click', () => {
+            mainHeader.classList.toggle('nav-open');
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                mainHeader.classList.remove('nav-open');
+            });
+        });
+
+        // Scroll-triggered Animations using Intersection Observer
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        animatedElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                // Close all other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current item
+                item.classList.toggle('active');
+            });
+        });
+
+        // Contact Modal
+        const contactBtn = document.getElementById('contact-btn');
+        const investBtn = document.getElementById('invest-btn');
+        const contactModal = document.getElementById('contact-modal');
+        const closeModal = document.getElementById('close-modal');
+        
+        contactBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            contactModal.style.display = 'flex';
+            setTimeout(() => contactModal.classList.add('show'), 10);
+            document.getElementById('subject').value = 'General Inquiry';
+        });
+        
+        investBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            contactModal.style.display = 'flex';
+            setTimeout(() => contactModal.classList.add('show'), 10);
+            document.getElementById('subject').value = 'Investment Inquiry';
+        });
+        
+        closeModal.addEventListener('click', () => {
+            contactModal.classList.remove('show');
+            setTimeout(() => contactModal.style.display = 'none', 300);
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === contactModal) {
+                contactModal.classList.remove('show');
+                setTimeout(() => contactModal.style.display = 'none', 300);
+            }
+        });
+
+        // Contact Form
+        const contactForm = document.getElementById('contact-form');
+        
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:wanjikubonfacefx@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Close modal
+            contactModal.classList.remove('show');
+            setTimeout(() => contactModal.style.display = 'none', 300);
+            
+            // Reset form
+            contactForm.reset();
+        });
+
+        // Back to Top Button
+        const backToTopBtn = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
