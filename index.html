@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jengaflow - Powering the Construction Revolution</title>
+    <title>Jengaflow - Powering Construction Revolution</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* --- General Styles & Resets --- */
@@ -14,7 +14,7 @@
             --light-color: #f8f9fa;
             --dark-color: #212529;
             --grey-color: #6c757d;
-            --header-height: 80px;
+            --header-height: 70px;
         }
 
         * {
@@ -54,8 +54,9 @@
         ul { list-style: none; }
         a { text-decoration: none; color: var(--primary-color); }
 
+        /* Section Padding */
         section {
-            padding: 6rem 0;
+            padding: 5rem 0;
         }
         
         .section-subtitle {
@@ -92,10 +93,7 @@
             border: 2px solid #fff;
             box-shadow: none;
         }
-        .btn-outline:hover {
-            background: #fff;
-            color: var(--primary-color);
-        }
+        .btn-outline:hover { background: #fff; color: var(--primary-color); }
 
         /* --- Header & Navigation --- */
         .main-header {
@@ -148,10 +146,11 @@
             z-index: 2001;
         }
         
-        /* --- NEW HERO SLIDER SECTION --- */
+        /* --- HERO SLIDER (UPDATED TO 50vh) --- */
         #hero-slider {
             position: relative;
-            height: 100vh;
+            /* CHANGE: Only takes 50% of Viewport Height */
+            height: 50vh; 
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -167,12 +166,15 @@
             height: 100%;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            background-size: cover;
+            /* Ensures images are Landscape on all screens without distortion */
+            background-size: cover; 
             background-position: center;
             z-index: 1;
         }
 
         .slide.active { opacity: 1; z-index: 2; }
+        
+        /* Overlay for text readability */
         .slide::after {
             content: '';
             position: absolute;
@@ -195,6 +197,7 @@
             transition: all 0.8s ease;
         }
 
+        /* Animation triggers when slide has .active class */
         .slide.active .hero-content h1 { animation: fadeUp 0.8s forwards 0.3s; }
         .slide.active .hero-content p { animation: fadeUp 0.8s forwards 0.6s; }
         .slide.active .hero-content .btn-group { animation: fadeUp 0.8s forwards 0.9s; }
@@ -208,45 +211,47 @@
         .slide-2 { background-image: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070'); }
         .slide-3 { background-image: url('https://images.unsplash.com/photo-1590496793929-36417d3117de?q=80&w=2069'); }
 
-        /* --- Section: Problem (Straight Line Grid) --- */
-        #problem { background-color: var(--light-color); }
-        .problem-grid {
+        /* --- Grid Layouts (Problem, Solution, Features) --- */
+        
+        .grid-4-col {
             display: grid;
+            /* Desktop: 4 Columns (Straight Line) */
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
         }
-        .problem-item {
+
+        .grid-3-col {
+            display: grid;
+            /* Desktop: 3 Columns */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        /* Card Styles */
+        .card-box {
             background: #fff;
             padding: 2rem 1.5rem;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-left: 5px solid var(--accent-color);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
         }
-        .problem-item:hover { transform: translateY(-10px); }
-        .problem-item h3 { color: var(--primary-color); font-size: 1.2rem; }
-        .problem-item i { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 1rem; }
 
-        /* --- Section: Solution & Features --- */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-        }
-        .feature-card {
-            background: #fff;
-            border: 1px solid #e9ecef;
-            border-radius: 12px;
-            padding: 2rem;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        .feature-card:hover { transform: translateY(-10px); border-color: var(--secondary-color); }
+        .card-box:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        
+        .problem-item { border-left: 5px solid var(--accent-color); }
+        .feature-card { border: 1px solid #e9ecef; }
+
+        .problem-item h3 { color: var(--primary-color); font-size: 1.2rem; margin-bottom: 1rem; }
+        .problem-item i { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 1rem; }
         .feature-card .icon { font-size: 3.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
 
-        /* --- Section: Team --- */
+        /* --- Sections --- */
+        #problem { background-color: var(--light-color); }
         #team { background-color: #fff; }
+        #contact { background-color: var(--light-color); }
+        
+        /* --- Team Section --- */
         .team-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -280,8 +285,7 @@
         }
         .social-links a:hover { background: var(--primary-color); color: #fff; }
 
-        /* --- Section: Contact Founder --- */
-        #contact { background-color: var(--light-color); }
+        /* --- Contact Section --- */
         .contact-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -309,12 +313,42 @@
         }
         .form-group input:focus, .form-group textarea:focus { border-color: var(--primary-color); outline: none; }
 
-        /* --- Section: Market & Business --- */
-        #market-opportunity { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070'); color: #fff; text-align: center; }
-        #market-opportunity h2 { color: #fff; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
-        .stat-item .number { font-size: 3rem; font-weight: 800; color: var(--accent-color); }
+        /* --- Ecosystem & Market --- */
+        #ecosystem {
+            background: linear-gradient(rgba(0, 95, 115, 0.92), rgba(10, 147, 150, 0.92)), url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070') no-repeat center center/cover;
+            color: #fff;
+        }
+        #ecosystem h2 { color: #fff; }
+        #ecosystem .section-subtitle { color: #e0e0e0; }
         
+        .eco-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: 0.3s;
+        }
+        .eco-card:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-5px); }
+        .eco-card h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .eco-card .icon { font-size: 3rem; color: var(--accent-color); margin-bottom: 1rem; }
+
+        #market-opportunity {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070') no-repeat center center/cover;
+            color: #fff; text-align: center;
+        }
+        #market-opportunity h2 { color: #fff; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        .stat-item .number { font-size: 3rem; font-weight: 800; color: var(--accent-color); }
+        .stat-item .label { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- Business Model & Ask --- */
         #business-model { background-color: var(--light-color); }
         .revenue-streams { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
         .revenue-stream {
@@ -322,9 +356,8 @@
             border-radius: 50px; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: 0.3s;
         }
-        .revenue-stream:hover { transform: scale(1.05); }
+        .revenue-stream:hover { transform: scale(1.05); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
 
-        /* --- Section: The Ask --- */
         #the-ask { background: var(--primary-color); color: #fff; text-align: center; }
         #the-ask h2 { color: #fff; }
         .ask-details {
@@ -333,25 +366,22 @@
         }
         .ask-details ul li { margin-bottom: 0.5rem; }
 
-        /* --- POWERFUL FOOTER --- */
+        /* --- Powerful Footer --- */
         .main-footer {
             background: #111;
             color: #bbb;
             padding-top: 5rem;
         }
-        
         .footer-top {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 3rem;
             margin-bottom: 4rem;
         }
-        
         .footer-col h4 { color: #fff; font-size: 1.3rem; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
         .footer-col h4::after {
             content: ''; position: absolute; left: 0; bottom: 0; width: 50px; height: 3px; background: var(--accent-color);
         }
-        
         .footer-col p { margin-bottom: 1.5rem; line-height: 1.8; }
         .footer-links li { margin-bottom: 10px; }
         .footer-links a { color: #bbb; transition: 0.3s; display: block; }
@@ -377,25 +407,42 @@
         .social-footer a { color: #fff; margin: 0 10px; font-size: 1.2rem; transition: 0.3s; }
         .social-footer a:hover { color: var(--accent-color); }
 
-        /* --- RESPONSIVE DESIGN --- */
+        /* =========================================
+           RESPONSIVE DESIGN (UPDATED)
+           ========================================= */
+        
+        /* Tablet: Switch grids to 2 columns */
         @media (max-width: 1024px) {
-            .problem-grid, .features-grid, .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .grid-4-col, .grid-3-col, .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
+        /* Mobile: Stack everything vertically */
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 2rem; }
+            h1 { font-size: 2.2rem; } /* Smaller font for 50vh */
+            h2 { font-size: 1.8rem; }
+            section { padding: 3rem 0; }
             
+            /* Navigation Mobile */
             .main-nav {
-                position: fixed; top: 0; right: -100%; width: 80%; max-width: 300px;
-                height: 100vh; background: #fff; transition: 0.3s; z-index: 1001; padding-top: 5rem;
+                position: fixed;
+                top: 0; right: -100%; width: 80%; max-width: 300px;
+                height: 100vh; background: #fff;
+                transition: 0.3s; z-index: 1001; padding-top: 5rem;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
             }
             .main-header.nav-open .main-nav { right: 0; }
-            .main-nav ul { flex-direction: column; }
+            .main-nav ul { flex-direction: column; padding: 0 2rem; }
             .nav-toggle { display: block; z-index: 1002; }
             
+            /* Force cards to stack 1x1 on mobile */
+            .grid-4-col, .grid-3-col, .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Contact Stack */
             .contact-container { grid-template-columns: 1fr; }
-            .problem-grid, .features-grid, .stats-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -419,12 +466,12 @@
     </header>
 
     <main>
-        <!-- NEW HERO SLIDER -->
+        <!-- HERO SLIDER (50vh Height) -->
         <section id="hero-slider">
             <!-- Slide 1 -->
             <div class="slide slide-1 active">
                 <div class="hero-content">
-                    <h1>Powering the Construction Revolution</h1>
+                    <h1>Powering Construction Revolution</h1>
                     <p>Connecting workers, developers, materials, finance & AI planning in real-time.</p>
                     <div class="btn-group">
                         <a href="#the-ask" class="btn">Invest Now</a>
@@ -437,7 +484,7 @@
             <div class="slide slide-2">
                 <div class="hero-content">
                     <h1>Transparency in Every Brick</h1>
-                    <p>Eliminate fraud and cost overruns with real-time tracking and blockchain-verified data.</p>
+                    <p>Eliminate fraud and cost overruns with real-time tracking and verified data.</p>
                     <div class="btn-group">
                         <a href="#contact" class="btn">Contact Founder</a>
                     </div>
@@ -448,7 +495,7 @@
             <div class="slide slide-3">
                 <div class="hero-content">
                     <h1>AI-Powered Site Planning</h1>
-                    <p>Auto-generate professional flow plans and architectural designs in minutes, not weeks.</p>
+                    <p>Auto-generate professional flow plans and architectural designs in minutes.</p>
                     <div class="btn-group">
                         <a href="#solution" class="btn">See AI Features</a>
                     </div>
@@ -456,30 +503,30 @@
             </div>
         </section>
 
-        <!-- Problem Section -->
+        <!-- Problem Section (4 Cols Straight Line) -->
         <section id="problem" class="container">
             <h2>The Problem We Are Solving</h2>
             <p class="section-subtitle">Construction today is broken and inefficient. This leads to costly and dangerous outcomes.</p>
-            <div class="problem-grid">
-                <div class="problem-item">
+            <div class="grid-4-col">
+                <div class="card-box problem-item">
                     <i class="fas fa-search"></i>
                     <h3>Lack of Transparency</h3>
                     <p>No real-time tracking of site progress.</p>
                 </div>
-                <div class="problem-item">
+                <div class="card-box problem-item">
                     <i class="fas fa-briefcase"></i>
                     <h3>Inefficient Job Access</h3>
                     <p>No mechanism for workers to find jobs.</p>
                 </div>
-                <div class="problem-item">
+                <div class="card-box problem-item">
                     <i class="fas fa-chart-line"></i>
                     <h3>No Accountability</h3>
                     <p>Poor rating systems lead to fraud.</p>
                 </div>
-                <div class="problem-item">
+                <div class="card-box problem-item">
                     <i class="fas fa-file-invoice-dollar"></i>
                     <h3>Costly Planning</h3>
-                    <p>Architectural services are slow and expensive.</p>
+                    <p>Architectural services are slow.</p>
                 </div>
             </div>
         </section>
@@ -490,30 +537,30 @@
             <p class="section-subtitle">An all-in-one construction management platform that brings the entire ecosystem into one seamless, transparent, and efficient digital space.</p>
         </section>
 
-        <!-- Features Section -->
+        <!-- Features Section (4 Cols Straight Line) -->
         <section id="features" class="container">
-            <div class="features-grid">
-                <div class="feature-card">
+            <div class="grid-4-col">
+                <div class="card-box feature-card">
                     <div class="icon">🗺️</div>
                     <h3>Site & Labour</h3>
                     <p>Map sites and track labour in real-time.</p>
                 </div>
-                <div class="feature-card">
+                <div class="card-box feature-card">
                     <div class="icon">📊</div>
                     <h3>Dashboard</h3>
                     <p>Live tracking of timelines & budgets.</p>
                 </div>
-                <div class="feature-card">
+                <div class="card-box feature-card">
                     <div class="icon">🤖</div>
                     <h3>Jengaflow AI</h3>
                     <p>Auto-generate plans and designs.</p>
                 </div>
-                <div class="feature-card">
+                <div class="card-box feature-card">
                     <div class="icon">⭐</div>
                     <h3>Ratings & Trust</h3>
                     <p>Rate contractors based on projects.</p>
                 </div>
-                <div class="feature-card">
+                <div class="card-box feature-card">
                     <div class="icon">💰</div>
                     <h3>Financial Tracking</h3>
                     <p>Promote procurement transparency.</p>
@@ -522,37 +569,38 @@
         </section>
         
         <!-- Ecosystem Section -->
-        <section id="ecosystem" style="background: var(--primary-color); color: #fff;">
+        <section id="ecosystem">
             <div class="container">
-                <h2 style="color: #fff;">Beyond Construction: The Ecosystem</h2>
-                <p class="section-subtitle" style="color: #e0e0e0;">Jengaflow integrates into housing, real estate, and supply chains.</p>
-                <div class="features-grid">
-                    <div class="feature-card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                <h2>Beyond Construction: The Ecosystem</h2>
+                <p class="section-subtitle">Jengaflow integrates into housing, real estate, and supply chains.</p>
+                <div class="grid-3-col">
+                    <div class="eco-card">
                         <div class="icon">🏡</div>
-                        <h3 style="color: #fff;">Find a House</h3>
-                        <p style="color: #ccc;">Rental listings linked to verified data.</p>
+                        <h3>Find a House</h3>
+                        <p>Rental listings linked to verified data.</p>
                     </div>
-                    <div class="feature-card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                    <div class="eco-card">
                         <div class="icon">🏗️</div>
-                        <h3 style="color: #fff;">Jengaflow Markets</h3>
-                        <p style="color: #ccc;">Remote scanning of material prices.</p>
+                        <h3>Jengaflow Markets</h3>
+                        <p>Remote scanning of material prices.</p>
                     </div>
-                    <div class="feature-card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                    <div class="eco-card">
                         <div class="icon">📍</div>
-                        <h3 style="color: #fff;">List Your Land</h3>
-                        <p style="color: #ccc;">Direct connection to landowners.</p>
+                        <h3>List Your Land</h3>
+                        <p>Direct connection to landowners.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- NEW TEAM SECTION -->
+        <!-- Team Section -->
         <section id="team" class="container">
             <h2>Meet Our Team</h2>
             <p class="section-subtitle">The visionaries behind Jengaflow's construction revolution.</p>
             <div class="team-grid">
                 <!-- Team Member 1 -->
                 <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2070" alt="Founder" class="team-img">
                     <div class="team-info">
                         <h3>Bonface K. Wanjiku</h3>
                         <p>Founder & CEO</p>
@@ -565,7 +613,8 @@
                 </div>
                 <!-- Team Member 2 -->
                 <div class="team-card">
-                   <div class="team-info">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070" alt="Dev" class="team-img">
+                    <div class="team-info">
                         <h3>Vincent Muthiani</h3>
                         <p>Backend Developer</p>
                         <div class="social-links">
@@ -576,6 +625,7 @@
                 </div>
                 <!-- Team Member 3 -->
                 <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2088" alt="Designer" class="team-img">
                     <div class="team-info">
                         <h3>Philip Muuo</h3>
                         <p>Frontend Developer</p>
@@ -588,13 +638,13 @@
             </div>
         </section>
 
-        <!-- NEW CONTACT SECTION -->
+        <!-- Contact Section -->
         <section id="contact">
             <div class="container">
                 <div class="contact-container">
                     <!-- Left: Info -->
                     <div class="contact-info">
-                        <h3>Contact the Founder</h3>
+                        <h3>Contact Founder</h3>
                         <p>Have questions about Jengaflow or interested in investing? Reach out directly.</p>
                         
                         <div class="info-item">
@@ -708,14 +758,14 @@
 
     </main>
 
-    <!-- POWERFUL FOOTER -->
+    <!-- Powerful Footer -->
     <footer class="main-footer">
         <div class="container">
             <div class="footer-top">
                 <!-- Col 1: Brand -->
                 <div class="footer-col">
                     <h2 style="font-size: 2rem; margin-bottom: 1rem;">JENGA<span style="color: var(--accent-color);">FLOW</span></h2>
-                    <p>Powering the construction revolution through technology, transparency, and efficiency. We are building the future of construction management in Africa.</p>
+                    <p>Powering construction revolution through technology, transparency, and efficiency. We are building the future of construction management in Africa.</p>
                 </div>
                 
                 <!-- Col 2: Quick Links -->
