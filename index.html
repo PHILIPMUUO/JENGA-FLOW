@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jengaflow - Powering the Construction Revolution</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* --- General Styles & Resets --- */
         :root {
@@ -31,7 +32,7 @@
             line-height: 1.6;
             color: var(--dark-color);
             background-color: #ffffff;
-            overflow-x: hidden; /* Prevents horizontal scroll from animations */
+            overflow-x: hidden;
         }
 
         .container {
@@ -46,16 +47,15 @@
             margin-bottom: 1rem;
         }
 
-        h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); color: #fff; }
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); color: #fff; }
         h2 { font-size: clamp(2rem, 4vw, 2.5rem); text-align: center; margin-bottom: 2rem; color: var(--primary-color);}
         h3 { font-size: 1.5rem; }
         p { margin-bottom: 1rem; }
         ul { list-style: none; }
         a { text-decoration: none; color: var(--primary-color); }
-        img { max-width: 100%; display: block; }
 
         section {
-            padding: 6rem 0; /* More breathing room */
+            padding: 6rem 0;
         }
         
         .section-subtitle {
@@ -66,101 +66,7 @@
             font-size: 1.1rem;
         }
 
-        /* --- Animations --- */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .animate-on-scroll.stagger-1 { transition-delay: 0.1s; }
-        .animate-on-scroll.stagger-2 { transition-delay: 0.2s; }
-        .animate-on-scroll.stagger-3 { transition-delay: 0.3s; }
-        .animate-on-scroll.stagger-4 { transition-delay: 0.4s; }
-        .animate-on-scroll.stagger-5 { transition-delay: 0.5s; }
-
-        /* --- Header & Navigation --- */
-        .main-header {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-            height: var(--header-height);
-            display: flex;
-            align-items: center;
-        }
-
-        .main-header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary-color);
-        }
-
-        .logo span {
-            color: var(--accent-color);
-        }
-
-        .main-nav ul {
-            display: flex;
-            align-items: center;
-        }
-
-        .main-nav a {
-            color: var(--dark-color);
-            padding: 0.5rem 1rem;
-            margin: 0 0.25rem;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .main-nav a:hover {
-            background-color: var(--light-color);
-            color: var(--primary-color);
-        }
-
-        .nav-toggle {
-            display: none;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--dark-color);
-            font-size: 1.5rem;
-            z-index: 1002;
-        }
-        
-        /* --- Hero Section --- */
-        #hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070') no-repeat center center/cover;
-            height: 100vh;
-            min-height: 600px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin-top: var(--header-height);
-        }
-
-        #hero .container {
-            max-width: 800px;
-        }
-
+        /* --- Buttons --- */
         .btn {
             display: inline-block;
             padding: 0.8rem 2.5rem;
@@ -180,287 +86,316 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(238, 155, 0, 0.4);
         }
-
-        /* --- Section: Problem (Straight Line Grid) --- */
-        #problem {
-            background-color: var(--light-color);
-        }
         
-        /* 
-           STRICT GRID LAYOUT
-           Ensures cards sit in a straight line and do not overlap 
-        */
-        .problem-grid {
-            display: grid;
-            /* Forces 4 equal columns on large screens */
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 1.5rem; /* Space between cards */
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #fff;
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: #fff;
+            color: var(--primary-color);
+        }
+
+        /* --- Header & Navigation --- */
+        .main-header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 2000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
         }
 
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            z-index: 2001;
+        }
+        .logo span { color: var(--accent-color); }
+
+        .main-nav ul { display: flex; align-items: center; }
+        .main-nav a {
+            color: var(--dark-color);
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .main-nav a:hover { background-color: var(--light-color); color: var(--primary-color); }
+
+        .nav-toggle {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            z-index: 2001;
+        }
+        
+        /* --- NEW HERO SLIDER SECTION --- */
+        #hero-slider {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: var(--header-height);
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .slide.active { opacity: 1; z-index: 2; }
+        .slide::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            color: #fff;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .hero-content h1, .hero-content p, .hero-content .btn-group {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .slide.active .hero-content h1 { animation: fadeUp 0.8s forwards 0.3s; }
+        .slide.active .hero-content p { animation: fadeUp 0.8s forwards 0.6s; }
+        .slide.active .hero-content .btn-group { animation: fadeUp 0.8s forwards 0.9s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Specific Slide Backgrounds */
+        .slide-1 { background-image: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070'); }
+        .slide-2 { background-image: url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070'); }
+        .slide-3 { background-image: url('https://images.unsplash.com/photo-1590496793929-36417d3117de?q=80&w=2069'); }
+
+        /* --- Section: Problem (Straight Line Grid) --- */
+        #problem { background-color: var(--light-color); }
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
         .problem-item {
             background: #fff;
             padding: 2rem 1.5rem;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 5px solid var(--accent-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
-        
-        .problem-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
+        .problem-item:hover { transform: translateY(-10px); }
+        .problem-item h3 { color: var(--primary-color); font-size: 1.2rem; }
+        .problem-item i { font-size: 2.5rem; color: var(--accent-color); margin-bottom: 1rem; }
 
-        .problem-item h3 {
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-        
-        .problem-item i {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        /* --- Section: Solution & Features (Straight Line Grid) --- */
+        /* --- Section: Solution & Features --- */
         .features-grid {
             display: grid;
-            /* Forces 4 columns to match problem section */
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
-            width: 100%;
         }
-
         .feature-card {
             background: #fff;
             border: 1px solid #e9ecef;
             border-radius: 12px;
             padding: 2rem;
             text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
         }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            border-color: var(--secondary-color);
-        }
+        .feature-card:hover { transform: translateY(-10px); border-color: var(--secondary-color); }
+        .feature-card .icon { font-size: 3.5rem; color: var(--secondary-color); margin-bottom: 1rem; }
 
-        .feature-card .icon {
-            font-size: 3.5rem;
-            color: var(--secondary-color);
-            margin-bottom: 1rem;
-        }
-
-        /* --- Section: The Ecosystem --- */
-        #ecosystem {
-            background: linear-gradient(rgba(0, 95, 115, 0.9), rgba(10, 147, 150, 0.9)), url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070') no-repeat center center/cover;
-            color: #fff;
-        }
-        
-        #ecosystem h2 {
-            color: #fff;
-        }
-
-        #ecosystem .section-subtitle {
-            color: #e0e0e0;
-        }
-
-        .ecosystem-grid {
+        /* --- Section: Team --- */
+        #team { background-color: #fff; }
+        .team-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
+            gap: 2.5rem;
         }
-        
-        .ecosystem-item {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: background-color 0.3s ease;
-        }
-
-        .ecosystem-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .ecosystem-item h3 { font-size: 1.3rem; }
-        .ecosystem-item .icon { font-size: 3rem; color: var(--accent-color); }
-
-        /* --- Section: Market Opportunity --- */
-        #market-opportunity {
-            background: linear-gradient(rgba(33, 37, 41, 0.9), rgba(33, 37, 41, 0.9)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070') no-repeat center center/cover;
-            color: #fff;
-            text-align: center;
-        }
-        
-        #market-opportunity h2 {
-            color: #fff;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-        
-        .stat-item {
-            padding: 1rem;
-        }
-        
-        .stat-item .number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent-color);
-        }
-        
-        .stat-item .label {
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* --- Section: Business Model --- */
-        #business-model {
-            background-color: var(--light-color);
-        }
-
-        .revenue-streams {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .revenue-stream {
+        .team-card {
             background: #fff;
-            color: var(--primary-color);
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.4s ease;
+            text-align: center;
+            border: 1px solid #eee;
         }
+        .team-card:hover { transform: translateY(-15px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .team-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            object-position: top;
+            background-color: #ddd;
+        }
+        .team-info { padding: 1.5rem; }
+        .team-info h3 { color: var(--primary-color); margin-bottom: 0.5rem; }
+        .team-info p { color: var(--accent-color); font-weight: 600; font-size: 0.9rem; margin-bottom: 1rem; }
+        .social-links a {
+            display: inline-flex; justify-content: center; align-items: center;
+            width: 35px; height: 35px; border-radius: 50%;
+            background: var(--light-color); color: var(--primary-color);
+            transition: 0.3s; margin: 0 5px;
+        }
+        .social-links a:hover { background: var(--primary-color); color: #fff; }
+
+        /* --- Section: Contact Founder --- */
+        #contact { background-color: var(--light-color); }
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .contact-info h3 { font-size: 2rem; margin-bottom: 1.5rem; color: var(--primary-color); }
+        .info-item { display: flex; align-items: center; margin-bottom: 1.5rem; }
+        .info-item i {
+            width: 50px; height: 50px; background: var(--primary-color); color: #fff;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; margin-right: 1.5rem;
+        }
+        .contact-form {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--dark-color); }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;
+            font-family: inherit; transition: 0.3s;
+        }
+        .form-group input:focus, .form-group textarea:focus { border-color: var(--primary-color); outline: none; }
+
+        /* --- Section: Market & Business --- */
+        #market-opportunity { background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070'); color: #fff; text-align: center; }
+        #market-opportunity h2 { color: #fff; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+        .stat-item .number { font-size: 3rem; font-weight: 800; color: var(--accent-color); }
         
-        .revenue-stream:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        #business-model { background-color: var(--light-color); }
+        .revenue-streams { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        .revenue-stream {
+            background: #fff; color: var(--primary-color); padding: 0.8rem 1.5rem;
+            border-radius: 50px; font-weight: 600; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
         }
+        .revenue-stream:hover { transform: scale(1.05); }
 
         /* --- Section: The Ask --- */
-        #the-ask {
-            background-color: var(--primary-color);
-            color: #fff;
-            text-align: center;
-        }
-
-        #the-ask h2 {
-            color: #fff;
-        }
-
-        #the-ask p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem auto;
-        }
-        
+        #the-ask { background: var(--primary-color); color: #fff; text-align: center; }
+        #the-ask h2 { color: #fff; }
         .ask-details {
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 12px;
-            margin-top: 1rem;
-            text-align: left;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+            background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px;
+            max-width: 600px; margin: 2rem auto; text-align: left; border: 1px solid rgba(255,255,255,0.2);
         }
-        
-        .ask-details h3 {
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        
-        .ask-details ul li {
-            margin-bottom: 0.5rem;
-        }
+        .ask-details ul li { margin-bottom: 0.5rem; }
 
-        /* --- Footer --- */
+        /* --- POWERFUL FOOTER --- */
         .main-footer {
-            background: var(--dark-color);
-            color: #fff;
-            padding: 3rem 0;
+            background: #111;
+            color: #bbb;
+            padding-top: 5rem;
+        }
+        
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        
+        .footer-col h4 { color: #fff; font-size: 1.3rem; margin-bottom: 1.5rem; position: relative; padding-bottom: 10px; }
+        .footer-col h4::after {
+            content: ''; position: absolute; left: 0; bottom: 0; width: 50px; height: 3px; background: var(--accent-color);
+        }
+        
+        .footer-col p { margin-bottom: 1.5rem; line-height: 1.8; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: #bbb; transition: 0.3s; display: block; }
+        .footer-links a:hover { color: var(--accent-color); padding-left: 5px; }
+        
+        .newsletter-form { display: flex; gap: 10px; }
+        .newsletter-form input {
+            flex: 1; padding: 10px; border-radius: 5px; border: none; outline: none;
+        }
+        .newsletter-form button {
+            background: var(--accent-color); color: #fff; border: none; padding: 10px 20px;
+            border-radius: 5px; cursor: pointer; transition: 0.3s;
+        }
+        .newsletter-form button:hover { background: #fff; color: var(--accent-color); }
+
+        .footer-bottom {
+            background: #000;
+            padding: 1.5rem 0;
             text-align: center;
+            border-top: 1px solid #333;
         }
-
-        .main-footer p {
-            margin-bottom: 0.5rem;
-        }
-
-        .main-footer a {
-            color: var(--accent-color);
-        }
+        .social-footer { margin-top: 1rem; }
+        .social-footer a { color: #fff; margin: 0 10px; font-size: 1.2rem; transition: 0.3s; }
+        .social-footer a:hover { color: var(--accent-color); }
 
         /* --- RESPONSIVE DESIGN --- */
-        
-        /* Tablet: Switch straight line to 2x2 grid */
         @media (max-width: 1024px) {
-            .problem-grid, .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .problem-grid, .features-grid, .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
-        /* Mobile: Stack everything vertically */
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             h2 { font-size: 2rem; }
-            #hero h1 { font-size: 2.8rem; }
-
+            
             .main-nav {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 80%;
-                max-width: 300px;
-                height: 100vh;
-                background: #fff;
-                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-                transition: right 0.3s ease;
-                z-index: 1001;
-                padding-top: 5rem;
+                position: fixed; top: 0; right: -100%; width: 80%; max-width: 300px;
+                height: 100vh; background: #fff; transition: 0.3s; z-index: 1001; padding-top: 5rem;
             }
-
-            .main-header.nav-open .main-nav {
-                right: 0;
-            }
-
-            .main-nav ul {
-                flex-direction: column;
-                padding: 0 2rem;
-            }
+            .main-header.nav-open .main-nav { right: 0; }
+            .main-nav ul { flex-direction: column; }
+            .nav-toggle { display: block; z-index: 1002; }
             
-            .main-nav a {
-                display: block;
-                padding: 1rem;
-                text-align: center;
-            }
-
-            .nav-toggle {
-                display: block;
-                z-index: 1002;
-            }
-            
-            /* Force cards to stack 1x1 on mobile */
-            .problem-grid, .features-grid {
-                grid-template-columns: 1fr;
-            }
+            .contact-container { grid-template-columns: 1fr; }
+            .problem-grid, .features-grid, .stats-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -469,13 +404,14 @@
     <!-- Header -->
     <header class="main-header">
         <div class="container">
-            <a href="#hero" class="logo">JENGA<span>FLOW</span></a>
+            <a href="#" class="logo">JENGA<span>FLOW</span></a>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="#problem">The Problem</a></li>
-                    <li><a href="#solution">The Solution</a></li>
-                    <li><a href="#ecosystem">Ecosystem</a></li>
-                    <li><a href="#the-ask">Invest</a></li>
+                    <li><a href="#problem">Problem</a></li>
+                    <li><a href="#solution">Solution</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#the-ask" style="color: var(--accent-color); font-weight: 700;">Invest</a></li>
                 </ul>
             </nav>
             <button class="nav-toggle" id="nav-toggle">☰</button>
@@ -483,154 +419,281 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
-        <section id="hero">
-            <div class="container">
-                <h1 class="animate-on-scroll">Powering the Construction Revolution</h1>
-                <p class="animate-on-scroll">Connecting workers, developers, materials, finance & AI planning in real-time. One platform instead of chaos.</p>
-                <a href="#the-ask" class="btn animate-on-scroll">Join the Revolution</a>
+        <!-- NEW HERO SLIDER -->
+        <section id="hero-slider">
+            <!-- Slide 1 -->
+            <div class="slide slide-1 active">
+                <div class="hero-content">
+                    <h1>Powering the Construction Revolution</h1>
+                    <p>Connecting workers, developers, materials, finance & AI planning in real-time.</p>
+                    <div class="btn-group">
+                        <a href="#the-ask" class="btn">Invest Now</a>
+                        <a href="#solution" class="btn btn-outline">Explore Solutions</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="slide slide-2">
+                <div class="hero-content">
+                    <h1>Transparency in Every Brick</h1>
+                    <p>Eliminate fraud and cost overruns with real-time tracking and blockchain-verified data.</p>
+                    <div class="btn-group">
+                        <a href="#contact" class="btn">Contact Founder</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide slide-3">
+                <div class="hero-content">
+                    <h1>AI-Powered Site Planning</h1>
+                    <p>Auto-generate professional flow plans and architectural designs in minutes, not weeks.</p>
+                    <div class="btn-group">
+                        <a href="#solution" class="btn">See AI Features</a>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Problem Section (Straight Line) -->
+        <!-- Problem Section -->
         <section id="problem" class="container">
-            <h2 class="animate-on-scroll">The Problem We Are Solving</h2>
-            <p class="section-subtitle animate-on-scroll">Construction today is broken and inefficient. This leads to costly and dangerous outcomes.</p>
-            
-            <!-- Using Strict Grid -->
+            <h2>The Problem We Are Solving</h2>
+            <p class="section-subtitle">Construction today is broken and inefficient. This leads to costly and dangerous outcomes.</p>
             <div class="problem-grid">
-                <div class="problem-item animate-on-scroll stagger-1">
+                <div class="problem-item">
                     <i class="fas fa-search"></i>
                     <h3>Lack of Transparency</h3>
-                    <p>No real-time tracking of site progress, finances, or procurement.</p>
+                    <p>No real-time tracking of site progress.</p>
                 </div>
-                <div class="problem-item animate-on-scroll stagger-2">
+                <div class="problem-item">
                     <i class="fas fa-briefcase"></i>
                     <h3>Inefficient Job Access</h3>
-                    <p>No mechanism for workers to find jobs on remote sites.</p>
+                    <p>No mechanism for workers to find jobs.</p>
                 </div>
-                <div class="problem-item animate-on-scroll stagger-3">
+                <div class="problem-item">
                     <i class="fas fa-chart-line"></i>
                     <h3>No Accountability</h3>
-                    <p>Poor rating systems lead to low quality work and fraud.</p>
+                    <p>Poor rating systems lead to fraud.</p>
                 </div>
-                <div class="problem-item animate-on-scroll stagger-4">
+                <div class="problem-item">
                     <i class="fas fa-file-invoice-dollar"></i>
                     <h3>Costly Planning</h3>
-                    <p>Architectural and planning services are slow and expensive.</p>
+                    <p>Architectural services are slow and expensive.</p>
                 </div>
             </div>
         </section>
 
         <!-- Solution Section -->
         <section id="solution" class="container">
-            <h2 class="animate-on-scroll">The Solution – Jengaflow</h2>
-            <p class="section-subtitle animate-on-scroll">An all-in-one construction management platform that brings the entire ecosystem into one seamless, transparent, and efficient digital space.</p>
+            <h2>The Solution – Jengaflow</h2>
+            <p class="section-subtitle">An all-in-one construction management platform that brings the entire ecosystem into one seamless, transparent, and efficient digital space.</p>
         </section>
 
-        <!-- Features Section (Straight Line) -->
+        <!-- Features Section -->
         <section id="features" class="container">
-            <!-- Using Strict Grid -->
             <div class="features-grid">
-                <div class="feature-card animate-on-scroll stagger-1">
+                <div class="feature-card">
                     <div class="icon">🗺️</div>
-                    <h3>Site & Labour Management</h3>
-                    <p>Map ongoing construction sites and show real-time labour size & open slots. Workers find jobs, developers find talent.</p>
+                    <h3>Site & Labour</h3>
+                    <p>Map sites and track labour in real-time.</p>
                 </div>
-                <div class="feature-card animate-on-scroll stagger-2">
+                <div class="feature-card">
                     <div class="icon">📊</div>
-                    <h3>Developer Dashboard</h3>
-                    <p>Live tracking of timelines, budgets & materials. Ensure your project is on time and on budget.</p>
+                    <h3>Dashboard</h3>
+                    <p>Live tracking of timelines & budgets.</p>
                 </div>
-                <div class="feature-card animate-on-scroll stagger-3">
+                <div class="feature-card">
                     <div class="icon">🤖</div>
                     <h3>Jengaflow AI</h3>
-                    <p>Auto-generate professional flow plans and architectural designs in minutes, not weeks.</p>
+                    <p>Auto-generate plans and designs.</p>
                 </div>
-                <div class="feature-card animate-on-scroll stagger-4">
+                <div class="feature-card">
                     <div class="icon">⭐</div>
                     <h3>Ratings & Trust</h3>
-                    <p>Rate contractors, engineers & fundis based on real projects. Build a reputation for quality.</p>
+                    <p>Rate contractors based on projects.</p>
                 </div>
-                <!-- Note: 5th card will wrap naturally or stack on smaller screens depending on grid rules -->
-                <div class="feature-card animate-on-scroll stagger-5">
+                <div class="feature-card">
                     <div class="icon">💰</div>
                     <h3>Financial Tracking</h3>
-                    <p>Promote financial & procurement transparency to eliminate fraud and cost overruns.</p>
+                    <p>Promote procurement transparency.</p>
                 </div>
             </div>
         </section>
         
         <!-- Ecosystem Section -->
-        <section id="ecosystem">
+        <section id="ecosystem" style="background: var(--primary-color); color: #fff;">
             <div class="container">
-                <h2 class="animate-on-scroll">Beyond Construction: The Ecosystem</h2>
-                <p class="section-subtitle animate-on-scroll">Jengaflow integrates into housing, real estate, and supply chains, creating a comprehensive market.</p>
-                <div class="ecosystem-grid">
-                    <div class="ecosystem-item animate-on-scroll stagger-1">
+                <h2 style="color: #fff;">Beyond Construction: The Ecosystem</h2>
+                <p class="section-subtitle" style="color: #e0e0e0;">Jengaflow integrates into housing, real estate, and supply chains.</p>
+                <div class="features-grid">
+                    <div class="feature-card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
                         <div class="icon">🏡</div>
-                        <h3>Find a House</h3>
-                        <p>Rental listings linked to verified construction data for quality assurance.</p>
+                        <h3 style="color: #fff;">Find a House</h3>
+                        <p style="color: #ccc;">Rental listings linked to verified data.</p>
                     </div>
-                    <div class="ecosystem-item animate-on-scroll stagger-2">
+                    <div class="feature-card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
                         <div class="icon">🏗️</div>
-                        <h3>Jengaflow Markets</h3>
-                        <p>Remote scanning of construction material markets and prices for best deals.</p>
+                        <h3 style="color: #fff;">Jengaflow Markets</h3>
+                        <p style="color: #ccc;">Remote scanning of material prices.</p>
                     </div>
-                    <div class="ecosystem-item animate-on-scroll stagger-3">
+                    <div class="feature-card" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
                         <div class="icon">📍</div>
-                        <h3>List Your Land</h3>
-                        <p>Agencies and land owners can directly list their land for potential buyers.</p>
+                        <h3 style="color: #fff;">List Your Land</h3>
+                        <p style="color: #ccc;">Direct connection to landowners.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Market Opportunity Section -->
+        <!-- NEW TEAM SECTION -->
+        <section id="team" class="container">
+            <h2>Meet Our Team</h2>
+            <p class="section-subtitle">The visionaries behind Jengaflow's construction revolution.</p>
+            <div class="team-grid">
+                <!-- Team Member 1 -->
+                <div class="team-card">
+                    <div class="team-info">
+                        <h3>Bonface K. Wanjiku</h3>
+                        <p>Founder & CEO</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="mailto:wanjikubonfacefx@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Team Member 2 -->
+                <div class="team-card">
+                   <div class="team-info">
+                        <h3>Vincent Muthiani</h3>
+                        <p>Backend Developer</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Team Member 3 -->
+                <div class="team-card">
+                    <div class="team-info">
+                        <h3>Philip Muuo</h3>
+                        <p>Frontend Developer</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW CONTACT SECTION -->
+        <section id="contact">
+            <div class="container">
+                <div class="contact-container">
+                    <!-- Left: Info -->
+                    <div class="contact-info">
+                        <h3>Contact the Founder</h3>
+                        <p>Have questions about Jengaflow or interested in investing? Reach out directly.</p>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <div>
+                                <h4>Bonface K. Wanjiku</h4>
+                                <p>Founder & CEO</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <p>wanjikubonfacefx@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Phone</h4>
+                                <p>+254 718 868 880</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Form -->
+                    <div class="contact-form">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--primary-color);">Send a Message</h3>
+                        <form onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent.');">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" required placeholder="Your Name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" required placeholder="Your Email">
+                            </div>
+                            <div class="form-group">
+                                <label>Subject</label>
+                                <input type="text" required placeholder="Investment Inquiry">
+                            </div>
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea rows="5" required placeholder="How can we help?"></textarea>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Opportunity -->
         <section id="market-opportunity">
             <div class="container">
-                <h2 class="animate-on-scroll">Market Opportunity</h2>
-                <p class="section-subtitle animate-on-scroll">The Kenyan construction sector is ripe for digital disruption.</p>
+                <h2>Market Opportunity</h2>
+                <p class="section-subtitle" style="color: #e0e0e0;">The Kenyan construction sector is ripe for digital disruption.</p>
                 <div class="stats-grid">
-                    <div class="stat-item animate-on-scroll stagger-1">
-                        <div class="number">Multi-Billion</div>
-                        <div class="label">Shilling Sector</div>
+                    <div class="stat-item">
+                        <div class="number">KES 2.5T</div>
+                        <div class="label">Market Value</div>
                     </div>
-                    <div class="stat-item animate-on-scroll stagger-2">
-                        <div class="number">Millions</div>
-                        <div class="label">of Workers</div>
+                    <div class="stat-item">
+                        <div class="number">1.5M+</div>
+                        <div class="label">Workers</div>
                     </div>
-                    <div class="stat-item animate-on-scroll stagger-3">
-                        <div class="number">Thousands</div>
-                        <div class="label">of Developers</div>
+                    <div class="stat-item">
+                        <div class="number">40K+</div>
+                        <div class="label">Developers</div>
                     </div>
-                    <div class="stat-item animate-on-scroll stagger-4">
+                    <div class="stat-item">
                         <div class="number">0%</div>
-                        <div class="label">Dominant Platform</div>
+                        <div class="label">Digital Adoption</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Business Model Section -->
+        <!-- Business Model -->
         <section id="business-model" class="container">
-            <h2 class="animate-on-scroll">Scalable Business Model</h2>
-            <p class="section-subtitle animate-on-scroll">Multiple revenue streams ensure growth as platform usage increases.</p>
+            <h2>Scalable Business Model</h2>
+            <p class="section-subtitle">Multiple revenue streams ensure growth as platform usage increases.</p>
             <div class="revenue-streams">
-                <span class="revenue-stream animate-on-scroll stagger-1">💳 Subscriptions</span>
-                <span class="revenue-stream animate-on-scroll stagger-2">🤖 AI Planning Tools</span>
-                <span class="revenue-stream animate-on-scroll stagger-3">💼 Job & Procurement Commission</span>
-                <span class="revenue-stream animate-on-scroll stagger-4">📢 Featured Listings & Ads</span>
-                <span class="revenue-stream animate-on-scroll stagger-5">🔄 Transaction Fees</span>
+                <span class="revenue-stream">💳 Subscriptions</span>
+                <span class="revenue-stream">🤖 AI Planning Tools</span>
+                <span class="revenue-stream">💼 Job Commission</span>
+                <span class="revenue-stream">📢 Featured Ads</span>
+                <span class="revenue-stream">🔄 Transaction Fees</span>
             </div>
         </section>
 
-        <!-- The Ask Section -->
+        <!-- The Ask -->
         <section id="the-ask">
             <div class="container">
-                <h2 class="animate-on-scroll">The Ask: Angel Investment</h2>
-                <p class="animate-on-scroll">We are seeking angel investment to build our MVP and launch Jengaflow, transforming the future of construction in Kenya and beyond.</p>
-                <div class="ask-details animate-on-scroll">
+                <h2>The Ask: Angel Investment</h2>
+                <p>We are seeking angel investment to build our MVP and launch Jengaflow.</p>
+                <div class="ask-details">
                     <h3>Use of Funds</h3>
                     <ul>
                         <li>✔ Build core MVP modules</li>
@@ -639,25 +702,68 @@
                         <li>✔ Pilot on real construction sites</li>
                     </ul>
                 </div>
-                <a href="mailto:wanjikubonfacefx@gmail.com" class="btn animate-on-scroll" style="margin-top: 2rem;">Contact Founder</a>
+                <a href="mailto:wanjikubonfacefx@gmail.com" class="btn" style="margin-top: 2rem;">Contact Founder</a>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
+    <!-- POWERFUL FOOTER -->
     <footer class="main-footer">
         <div class="container">
-            <h3>Let's Build the Future, Together.</h3>
-            <p>Founder: Bonface K. Wanjiku</p>
-            <p>Email: <a href="mailto:wanjikubonfacefx@gmail.com">wanjikubonfacefx@gmail.com</a></p>
-            <p>Phone: <a href="tel:+254718868880">+254 718 868 880</a></p>
-            <p style="margin-top: 1rem;">&copy; 2024 Jengaflow. All Rights Reserved.</p>
+            <div class="footer-top">
+                <!-- Col 1: Brand -->
+                <div class="footer-col">
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem;">JENGA<span style="color: var(--accent-color);">FLOW</span></h2>
+                    <p>Powering the construction revolution through technology, transparency, and efficiency. We are building the future of construction management in Africa.</p>
+                </div>
+                
+                <!-- Col 2: Quick Links -->
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#problem">The Problem</a></li>
+                        <li><a href="#solution">The Solution</a></li>
+                        <li><a href="#team">Our Team</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Contact Info -->
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope" style="margin-right: 10px;"></i> wanjikubonfacefx@gmail.com</li>
+                        <li><i class="fas fa-phone" style="margin-right: 10px;"></i> +254 718 868 880</li>
+                        <li><i class="fas fa-map-marker-alt" style="margin-right: 10px;"></i> Nairobi, Kenya</li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Newsletter -->
+                <div class="footer-col">
+                    <h4>Stay Updated</h4>
+                    <p style="margin-bottom: 1rem; font-size: 0.9rem;">Subscribe to our newsletter for updates.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Email Address">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Jengaflow. All Rights Reserved.</p>
+                <div class="social-footer">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Mobile Navigation Toggle
+        // Mobile Navigation
         const navToggle = document.getElementById('nav-toggle');
         const mainHeader = document.querySelector('.main-header');
 
@@ -665,29 +771,24 @@
             mainHeader.classList.toggle('nav-open');
         });
 
-        // Close mobile menu when a link is clicked
         document.querySelectorAll('.main-nav a').forEach(link => {
             link.addEventListener('click', () => {
                 mainHeader.classList.remove('nav-open');
             });
         });
 
-        // Scroll-triggered Animations using Intersection Observer
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        // HERO SLIDER SCRIPT
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                }
-            });
-        }, {
-            threshold: 0.1 // Trigger when 10% of the element is visible
-        });
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
 
-        animatedElements.forEach(element => {
-            observer.observe(element);
-        });
+        // Change slide every 5 seconds
+        setInterval(nextSlide, 5000);
     </script>
 </body>
 </html>
