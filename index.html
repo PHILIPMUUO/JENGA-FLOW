@@ -6,1178 +6,681 @@
     <title>Jengaflow - Powering the Construction Revolution</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- General Styles & Resets --- */
+        /* =========================================
+           GLOBAL VARIABLES & RESET
+           ========================================= */
         :root {
-            --primary-color: #005f73; /* Deep Teal */
+            --primary-color: #005f73;
             --primary-dark: #003e4f;
-            --secondary-color: #0a9396; /* Light Teal */
-            --accent-color: #ee9b00; /* Orange/Yellow */
+            --secondary-color: #0a9396;
+            --accent-color: #ee9b00;
             --accent-glow: rgba(238, 155, 0, 0.4);
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --grey-color: #6c757d;
-            --glass-bg: rgba(255, 255, 255, 0.95);
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --dark-text: #212529;
+            --grey-text: #6c757d;
             --header-height: 80px;
-            --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --transition-bounce: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --sidebar-width: 260px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.6;
-            color: var(--dark-color);
-            background-color: #ffffff;
+            color: var(--dark-text);
+            background-color: var(--white);
             overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        h1, h2, h3 {
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-
-        h1 { 
-            font-size: clamp(2.5rem, 5vw, 3.5rem); 
-            color: #fff; 
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        h2 { 
-            font-size: clamp(2rem, 4vw, 2.5rem); 
-            text-align: center; 
-            margin-bottom: 2rem; 
-            color: var(--primary-color);
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        h2::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background: var(--accent-color);
-            margin: 10px auto 0;
-            border-radius: 2px;
-        }
-
-        h3 { font-size: 1.5rem; }
-        p { margin-bottom: 1rem; }
-        ul { list-style: none; }
-        a { text-decoration: none; color: inherit; }
-
-        section {
-            padding: 6rem 0;
-        }
-        
-        .section-subtitle {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 4rem auto;
-            color: var(--grey-color);
-            font-size: 1.1rem;
-        }
-
-        /* --- Buttons --- */
+        /* Utility Classes */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .section-padding { padding: 6rem 0; }
+        .text-center { text-align: center; }
         .btn {
-            display: inline-block;
-            padding: 0.8rem 2rem;
-            background: var(--accent-color);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: var(--transition-smooth);
-            box-shadow: 0 4px 15px rgba(238, 155, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 1rem; 
-            width: 100%;
-            max-width: 300px;
-        }
-        
-        .btn:hover {
-            background: #d68910;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(238, 155, 0, 0.4);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--accent-color);
-            color: var(--accent-color);
-            box-shadow: none;
-        }
-        
-        .btn-outline:hover { color: #fff; box-shadow: 0 5px 15px rgba(238, 155, 0, 0.2); }
-
-        /* --- Loading Screen --- */
-        .loader-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--primary-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-        .loader-logo { font-size: 2.5rem; font-weight: 800; color: white; margin-bottom: 1rem; }
-        .loader-logo span { color: var(--accent-color); }
-        .loader-bar { width: 200px; height: 4px; background-color: rgba(255, 255, 255, 0.2); border-radius: 2px; overflow: hidden; }
-        .loader-progress { height: 100%; width: 0; background-color: var(--accent-color); animation: loading 2s ease-in-out forwards; }
-        @keyframes loading { 0% { width: 0; } 100% { width: 100%; } }
-
-        /* --- Animations --- */
-        .animate-on-scroll {
-            opacity: 0;
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0) translateX(0); }
-        .animate-on-scroll.slide-in-left { transform: translateX(-50px); }
-        .animate-on-scroll.slide-in-right { transform: translateX(50px); }
-        .animate-on-scroll.slide-in-bottom { transform: translateY(30px); }
-
-        /* --- Header & Navigation --- */
-        .main-header {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 0.8rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            height: var(--header-height);
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .main-header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--primary-color);
-            letter-spacing: -1px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
-            z-index: 1002;
-            transition: transform 0.3s ease;
-        }
-        
-        .logo:hover { transform: scale(1.05); color: var(--secondary-color); }
-        .logo span { color: var(--accent-color); }
-
-        .main-nav { display: flex; align-items: center; }
-        .main-nav ul { display: flex; align-items: center; }
-
-        .main-nav a {
-            color: var(--primary-color);
-            padding: 0.6rem 1.2rem;
-            margin: 0 0.3rem;
-            border-radius: 12px;
-            position: relative;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition-smooth);
-            white-space: nowrap;
-        }
-
-        .main-nav a:hover {
-            background: rgba(0, 95, 115, 0.08);
-            color: var(--accent-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 95, 115, 0.1);
-        }
-
-        .main-nav a::after {
-            content: '';
-            position: absolute;
-            bottom: 6px;
-            left: 50%;
-            width: 0;
-            height: 3px;
-            background: var(--accent-color);
-            transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            transform: translateX(-50%);
-            border-radius: 2px;
-            box-shadow: 0 2px 5px var(--accent-glow);
-        }
-
-        .main-nav a:hover::after { width: 60%; }
-
-        .nav-toggle {
-            display: none;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            z-index: 1002;
-        }
-        
-        .nav-toggle:hover { color: var(--accent-color); transform: rotate(90deg); }
-
-        /* --- Hero Section --- */
-        #hero {
-            background: linear-gradient(135deg, rgba(0, 95, 115, 0.85), rgba(10, 147, 150, 0.75)), url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070') no-repeat center center/cover;
-            height: 100vh;
-            min-height: 600px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            padding-top: var(--header-height);
-        }
-        
-        #hero p { font-size: 1.25rem; margin-bottom: 2.5rem; opacity: 0.9; }
-
-        /* --- 3D STRAIGHT LINE CARD LAYOUT --- */
-        /* Used for Problem & Solution */
-        .cards-3d-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 3rem;
-            perspective: 2000px; /* Essential for 3D effect */
-            padding: 2rem 0;
-        }
-
-        .card-3d {
-            flex: 1 1 250px; /* Responsive but maintains structure */
-            max-width: 300px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            padding: 3rem 2rem;
-            text-align: center;
-            box-shadow: 
-                0 15px 35px rgba(0,0,0,0.1), 
-                0 5px 15px rgba(0,0,0,0.05),
-                inset 0 0 0 1px rgba(255,255,255,0.5); /* Subtle border */
-            position: relative;
-            transition: var(--transition-bounce);
-            transform-style: preserve-3d;
-            /* Initial subtle tilt */
-            transform: rotateX(2deg) rotateY(2deg); 
-        }
-
-        /* Problem Cards Specific Style */
-        .problem-wrapper .card-3d {
-            border-top: 6px solid var(--accent-color);
-        }
-        .problem-wrapper .card-3d:hover {
-            transform: translateY(-15px) rotateX(0deg) scale(1.05);
-            box-shadow: 0 25px 50px rgba(238, 155, 0, 0.25);
-        }
-        .problem-wrapper .card-3d:nth-child(even) {
-            transform: rotateX(-2deg) rotateY(-2deg); /* Alternating tilt */
-        }
-
-        /* Solution Cards Specific Style */
-        .solution-wrapper .card-3d {
-            background: #fff;
-            border-top: 6px solid var(--primary-color);
-        }
-        .solution-wrapper .card-3d:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 25px 50px rgba(0, 95, 115, 0.25);
-            border-color: var(--secondary-color);
-        }
-        
-        .card-icon-3d {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-            transition: var(--transition-bounce);
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.15));
-        }
-        
-        .card-3d:hover .card-icon-3d {
-            transform: scale(1.2) translateZ(20px); /* 3D pop effect */
-        }
-
-        .card-3d h3 {
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .problem-wrapper .card-3d:hover h3 { color: var(--accent-color); }
-
-        /* --- Section: The Ecosystem --- */
-        #ecosystem {
-            background: linear-gradient(rgba(0, 95, 115, 0.92), rgba(10, 147, 150, 0.92)), url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070') no-repeat center center/cover;
-            color: #fff;
-        }
-        
-        #ecosystem h2 { color: #fff; }
-        #ecosystem h2::after { background: #fff; }
-        #ecosystem .section-subtitle { color: #e0e0e0; }
-
-        .ecosystem-item {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2.5rem 2rem;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: var(--transition-smooth);
-            flex: 1 1 250px;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-
-        .ecosystem-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            border-color: #fff;
-        }
-        
-        .ecosystem-item h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
-        .ecosystem-item .icon { font-size: 3rem; color: var(--accent-color); margin-bottom: 1rem; }
-
-        /* --- Market Opportunity --- */
-        #market-opportunity {
-            background: linear-gradient(rgba(33, 37, 41, 0.92), rgba(33, 37, 41, 0.92)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070') no-repeat center center/cover;
-            color: #fff;
-            text-align: center;
-        }
-        
-        #market-opportunity h2 { color: #fff; }
-        #market-opportunity h2::after { background: var(--accent-color); }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 3rem;
-        }
-        
-        .stat-item { padding: 1rem; transition: var(--transition-bounce); }
-        .stat-item:hover { transform: translateY(-5px); }
-        
-        .stat-item .number {
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
-            font-weight: 800;
-            color: var(--accent-color);
-            margin-bottom: 0.5rem;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        
-        .stat-item .label {
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-            opacity: 0.9;
-        }
-
-        /* --- Section: Business Model --- */
-        #business-model { background-color: var(--light-color); }
-
-        .revenue-streams {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .revenue-stream {
-            background: #fff;
-            color: var(--primary-color);
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            cursor: default;
-        }
-        
-        .revenue-stream::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: var(--accent-color);
-            transform: translate(-50%, -50%);
-            transition: width 0.5s ease, height 0.5s ease;
-            z-index: -1;
-        }
-        
-        .revenue-stream span { position: relative; z-index: 2; }
-        
-        .revenue-stream:hover::before { width: 300px; height: 300px; }
-        .revenue-stream:hover {
-            color: #fff;
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(238, 155, 0, 0.2);
-        }
-
-        /* --- Patent Information --- */
-        #patent { background-color: #fff; }
-        .patent-content {
-            background: var(--light-color);
-            padding: 3rem;
-            border-radius: 16px;
-            border-left: 6px solid var(--accent-color);
-            transition: var(--transition-smooth);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .patent-content:hover {
-            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
-            transform: translateX(10px);
-        }
-        .patent-number { font-weight: 700; color: var(--primary-color); font-size: 1.1rem; }
-
-        /* --- Team Section --- */
-        #team { background-color: var(--light-color); }
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-        .team-member {
-            background: #fff;
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            transition: var(--transition-smooth);
-            text-align: center;
-        }
-        .team-member:hover { transform: translateY(-15px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .team-avatar {
-            width: 100px; height: 100px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0 auto 1.5rem auto;
-            box-shadow: 0 8px 15px rgba(0, 95, 115, 0.3);
-        }
-        .team-member h3 { margin-bottom: 0.3rem; color: var(--primary-color); }
-        .team-member .role { color: var(--accent-color); font-weight: 600; margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.85rem; }
-        .social-links { display: flex; justify-content: center; gap: 1rem; }
-        .social-links a {
-            display: flex; justify-content: center; align-items: center;
-            width: 40px; height: 40px;
-            background-color: var(--light-color);
-            color: var(--primary-color);
-            border-radius: 50%;
-            transition: var(--transition-bounce);
-        }
-        .social-links a:hover { background-color: var(--primary-color); color: #fff; transform: rotate(360deg); }
-
-        /* --- FAQ Section --- */
-        #faq { background-color: #fff; }
-        .faq-container { max-width: 800px; margin: 0 auto; }
-        .faq-item {
-            background: var(--light-color);
-            border-radius: 12px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            transition: var(--transition-smooth);
-        }
-        .faq-item:hover { border-color: var(--secondary-color); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .faq-question {
-            padding: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .faq-question i { transition: var(--transition-bounce); color: var(--accent-color); }
-        .faq-item.active .faq-question i { transform: rotate(180deg); }
-        .faq-answer {
-            max-height: 0; overflow: hidden; transition: max-height 0.4s ease; padding: 0 1.5rem;
-            color: var(--grey-color);
-        }
-        .faq-item.active .faq-answer { max-height: 500px; padding: 0 1.5rem 1.5rem 1.5rem; }
-
-        /* --- The Ask --- */
-        #the-ask {
-            background-color: var(--primary-color);
-            color: #fff;
-            text-align: center;
-            background-image: linear-gradient(rgba(0,95,115,0.9), rgba(0,95,115,0.9)), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070');
-            background-size: cover;
-            background-attachment: fixed;
-        }
-        #the-ask h2 { color: #fff; }
-        #the-ask h2::after { background: var(--accent-color); }
-        .ask-details {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            padding: 3rem 2rem;
-            border-radius: 16px;
-            margin-top: 2rem;
-            text-align: left;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .ask-details ul li { margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; }
-        .ask-details ul li i { color: var(--accent-color); margin-right: 1rem; width: 25px; text-align: center; }
-
-        /* --- SUPER ADMIN DASHBOARD SECTION --- */
-        #admin-dashboard-section {
-            padding: 4rem 0;
-            background-color: #f0f2f5;
-            min-height: 80vh;
-        }
-
-        .admin-layout {
-            display: flex;
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .admin-sidebar {
-            width: 280px;
-            background: var(--primary-color);
-            border-radius: 16px;
-            padding: 2rem;
-            color: #fff;
-            box-shadow: 0 10px 30px rgba(0, 95, 115, 0.2);
-            height: fit-content;
-        }
-
-        .admin-sidebar h3 { margin-bottom: 2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 1rem; }
-        
-        .admin-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .admin-menu a {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            border-radius: 8px;
-            color: rgba(255,255,255,0.8);
-            transition: 0.3s;
-        }
-
-        .admin-menu a:hover, .admin-menu a.active {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            transform: translateX(5px);
-        }
-
-        .admin-menu a i { width: 30px; }
-
-        .admin-content {
-            flex: 1;
-            background: #fff;
-            border-radius: 16px;
-            padding: 2.5rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .admin-cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-card {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            transition: 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
-            border-color: var(--secondary-color);
-        }
-
-        .stat-icon {
-            width: 50px; height: 50px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .bg-blue { background: rgba(0, 95, 115, 0.1); color: var(--primary-color); }
-        .bg-orange { background: rgba(238, 155, 0, 0.1); color: var(--accent-color); }
-        .bg-green { background: rgba(40, 167, 69, 0.1); color: #28a745; }
-
-        .stat-info h4 { font-size: 0.9rem; color: var(--grey-color); font-weight: 500; }
-        .stat-info span { font-size: 1.5rem; font-weight: 700; color: var(--dark-color); }
-
-        .table-responsive { overflow-x: auto; }
-        .admin-table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        .admin-table th { text-align: left; padding: 1rem; background: #f8f9fa; color: var(--grey-color); font-weight: 600; }
-        .admin-table td { padding: 1rem; border-bottom: 1px solid #eee; }
-        .admin-table tr:hover { background: #fafafa; }
-        
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .status-active { background: rgba(40, 167, 69, 0.1); color: #28a745; }
-        .status-pending { background: rgba(238, 155, 0, 0.1); color: var(--accent-color); }
-
-        /* --- Footer --- */
-        .main-footer { background: var(--dark-color); color: #fff; padding: 4rem 0 2rem 0; position: relative; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 3rem; }
-        .footer-column h3 { font-size: 1.3rem; margin-bottom: 1.5rem; color: var(--accent-color); }
-        .footer-column ul li { margin-bottom: 0.8rem; }
-        .footer-column a { color: #bbb; transition: var(--transition-smooth); display: block; }
-        .footer-column a:hover { color: #fff; transform: translateX(5px); }
-        .footer-bottom { text-align: center; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.9rem; color: #777; }
-        .admin-trigger { text-align: center; margin-top: 2rem; opacity: 0.3; cursor: pointer; font-size: 0.8rem; transition: 0.3s; }
-        .admin-trigger:hover { opacity: 1; color: var(--accent-color); }
-
-        /* --- Floating Buttons --- */
-        .whatsapp-btn {
-            position: fixed; bottom: 2rem; left: 2rem;
-            background-color: #25D366; color: #fff;
-            width: 60px; height: 60px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 2rem;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-            z-index: 1000;
-            transition: var(--transition-bounce);
+            display: inline-block; padding: 0.8rem 2.5rem; background: var(--accent-color); color: #fff;
+            border: none; border-radius: 50px; cursor: pointer; font-size: 1rem; font-weight: 600;
+            transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(238, 155, 0, 0.3);
             text-decoration: none;
         }
-        .whatsapp-btn:hover { transform: scale(1.1) rotate(10deg); }
+        .btn:hover { background: #d68910; transform: translateY(-3px); }
+        .btn-outline { background: transparent; border: 2px solid var(--accent-color); color: var(--accent-color); }
+        .btn-outline:hover { color: #fff; background: var(--accent-color); }
 
+        /* =========================================
+           VIEW MANAGEMENT (SPA Logic)
+           ========================================= */
+        #landing-view, #admin-view {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* Admin View is Hidden by Default */
+        #admin-view { display: none; }
+
+        /* =========================================
+           LANDING PAGE STYLES
+           ========================================= */
+        .main-header {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
+            position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); height: var(--header-height);
+        }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+        .logo { font-size: 1.8rem; font-weight: 900; color: var(--primary-color); letter-spacing: -1px; text-decoration: none;}
+        .logo span { color: var(--accent-color); }
+        .main-nav ul { display: flex; list-style: none; }
+        .main-nav a { 
+            color: var(--primary-color); padding: 0.6rem 1.2rem; margin: 0 0.3rem; 
+            border-radius: 12px; font-weight: 600; transition: 0.3s; text-decoration: none;
+        }
+        .main-nav a:hover, .main-nav a.active { background: rgba(0, 95, 115, 0.08); color: var(--accent-color); }
+        .nav-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--primary-color); }
+
+        /* Hero */
+        #hero {
+            background: linear-gradient(135deg, rgba(0, 95, 115, 0.85), rgba(10, 147, 150, 0.75)), url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070') no-repeat center center/cover;
+            height: 100vh; min-height: 600px; color: #fff; display: flex; align-items: center; text-align: center;
+        }
+        #hero h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); text-shadow: 0 4px 10px rgba(0,0,0,0.3); margin-bottom: 1rem; }
+        
+        /* Modern Alternating Layout (Problem & Solution) */
+        h2.section-title { font-size: clamp(2rem, 4vw, 2.5rem); margin-bottom: 1rem; color: var(--primary-color); text-align: center; }
+        .section-subtitle { text-align: center; max-width: 800px; margin: 0 auto 4rem auto; color: var(--grey-text); }
+
+        .feature-row { display: flex; align-items: center; gap: 4rem; margin-bottom: 4rem; padding: 2rem; border-radius: 20px; transition: 0.3s; }
+        .feature-row:hover { background: rgba(248, 249, 250, 0.5); transform: scale(1.01); }
+        .feature-row:nth-child(even) { flex-direction: row-reverse; }
+
+        .feature-icon-box {
+            flex: 0 0 300px; height: 300px; background: #fff; border-radius: 30px;
+            display: flex; justify-content: center; align-items: center; font-size: 8rem;
+            box-shadow: 20px 20px 60px #d1d1d1, -20px -20px 60px #ffffff;
+            transition: 0.5s ease; position: relative; overflow: hidden;
+        }
+        .feature-row:hover .feature-icon-box { transform: translateY(-10px) rotateY(10deg); box-shadow: 30px 30px 80px rgba(0,0,0,0.1); }
+        .feature-content { flex: 1; }
+        .feature-content h3 { font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem; }
+        .feature-content p { font-size: 1.1rem; color: var(--grey-text); line-height: 1.8; }
+
+        /* Specific Colors */
+        .problem-wrapper .feature-icon-box { color: #dc3545; border-bottom: 5px solid #dc3545; }
+        .problem-wrapper .feature-content h3 { color: #dc3545; }
+        .solution-wrapper .feature-icon-box { color: var(--secondary-color); border-bottom: 5px solid var(--secondary-color); }
+
+        /* Ecosystem */
+        #ecosystem { background: linear-gradient(rgba(0, 95, 115, 0.92), rgba(10, 147, 150, 0.92)), url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070'); color: #fff; }
+        .eco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .eco-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 2.5rem; border-radius: 16px; text-align: center; transition: 0.3s; border: 1px solid rgba(255,255,255,0.2); }
+        .eco-card:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-10px); }
+        .eco-card i { font-size: 3rem; color: var(--accent-color); margin-bottom: 1rem; }
+
+        /* Stats & Revenue */
+        #market-opportunity { background: #333; color: #fff; text-align: center; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; }
+        .stat-item h3 { font-size: 3rem; color: var(--accent-color); }
+        .revenue-streams { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+        .revenue-tag { background: #fff; padding: 1rem 2rem; border-radius: 50px; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; cursor: default;}
+        .revenue-tag:hover { transform: translateY(-5px); background: var(--primary-color); color: #fff; }
+
+        /* Team, Patent, FAQ */
+        .patent-box { background: var(--light-bg); padding: 2rem; border-left: 5px solid var(--accent-color); max-width: 800px; margin: 2rem auto; }
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .team-card { background: #fff; padding: 2rem; border-radius: 16px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05); transition: 0.3s; }
+        .team-card:hover { transform: translateY(-15px); }
+        .team-avatar { width: 80px; height: 80px; background: var(--primary-color); color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2rem; font-weight: 700; margin: 0 auto 1rem; }
+
+        .faq-item { background: #fff; border-radius: 12px; margin-bottom: 1rem; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .faq-question { padding: 1.5rem; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.4s; padding: 0 1.5rem; color: var(--grey-text); }
+        .faq-item.active .faq-answer { max-height: 500px; padding-bottom: 1.5rem; }
+
+        /* The Ask */
+        #the-ask { background: var(--primary-color); color: #fff; text-align: center; background-image: linear-gradient(rgba(0,95,115,0.9), rgba(0,95,115,0.9)), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=2070'); background-size: cover; }
+        .ask-box { background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 16px; max-width: 700px; margin: 2rem auto; border: 1px solid rgba(255,255,255,0.2); text-align: left;}
+
+        /* Footer */
+        .main-footer { background: var(--dark-text); color: #fff; padding: 4rem 0 2rem 0; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+        .footer-bottom { text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: #777; }
+
+        /* Floating Buttons */
+        .whatsapp-btn {
+            position: fixed; bottom: 2rem; left: 2rem; background: #25D366; color: #fff;
+            width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 100; text-decoration: none;
+        }
         .back-to-top {
-            position: fixed; bottom: 2rem; right: 2rem;
-            width: 50px; height: 50px;
-            background-color: var(--primary-color); color: #fff;
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            cursor: pointer; opacity: 0; visibility: hidden;
-            transition: var(--transition-smooth); z-index: 999;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .back-to-top.show { opacity: 1; visibility: visible; }
-        .back-to-top:hover { background-color: var(--accent-color); transform: translateY(-5px); }
-
-        /* --- Responsive --- */
-        @media (max-width: 992px) {
-            h1 { font-size: 2.8rem; }
-            .admin-layout { flex-direction: column; }
-            .admin-sidebar { width: 100%; }
+            position: fixed; bottom: 2rem; right: 2rem; width: 50px; height: 50px;
+            background: var(--primary-color); color: #fff; border-radius: 50%; display: flex;
+            justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s; z-index: 99; cursor: pointer;
         }
 
+        /* =========================================
+           ADMIN DASHBOARD STYLES
+           ========================================= */
+        .admin-layout { display: flex; height: 100vh; background: #f0f2f5; }
+        
+        /* Admin Sidebar */
+        .admin-sidebar {
+            width: var(--sidebar-width); background: var(--primary-color); color: #fff;
+            display: flex; flex-direction: column; padding: 2rem 0; box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            flex-shrink: 0; transition: transform 0.3s ease;
+        }
+        .admin-brand { font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 3rem; letter-spacing: 1px; }
+        .admin-brand span { color: var(--accent-color); }
+        .admin-menu { list-style: none; }
+        .admin-menu-item {
+            padding: 12px 25px; cursor: pointer; display: flex; align-items: center; gap: 15px;
+            transition: 0.3s; opacity: 0.8; border-left: 4px solid transparent; color: #fff;
+        }
+        .admin-menu-item:hover, .admin-menu-item.active { background: rgba(255,255,255,0.1); opacity: 1; border-left-color: var(--accent-color); }
+        .admin-menu-item i { width: 20px; text-align: center; }
+        .admin-footer { margin-top: auto; text-align: center; padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .logout-btn { background: rgba(220, 53, 69, 0.2); color: #ffcccc; padding: 10px 20px; border: none; cursor: pointer; width: 100%; font-weight: 600; border-radius: 5px; }
+        .logout-btn:hover { background: #dc3545; color: #fff; }
+
+        /* Admin Content */
+        .admin-main { flex: 1; overflow-y: auto; padding: 2rem; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .admin-header h2 { color: var(--primary-color); }
+        .user-profile { display: flex; align-items: center; gap: 10px; }
+        .user-avatar { width: 40px; height: 40px; background: var(--secondary-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-weight: bold; }
+
+        /* Admin Stats & Tables */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: #fff; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 1rem; transition: 0.3s; border-bottom: 4px solid transparent; }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .stat-icon { width: 50px; height: 50px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; }
+        .stat-info h4 { font-size: 0.9rem; color: var(--grey-text); }
+        .stat-info h3 { font-size: 1.5rem; color: var(--dark-text); font-weight: 700; }
+
+        .content-section { background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: var(--grey-text); font-weight: 600; font-size: 0.9rem; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+
+        /* =========================================
+           RESPONSIVE DESIGN
+           ========================================= */
         @media (max-width: 768px) {
-            :root { --header-height: 70px; }
-            .main-nav { position: fixed; top: 0; right: -100%; width: 85%; max-width: 320px; height: 100vh; background: #fff; z-index: 1001; padding-top: 90px; transition: right 0.4s ease; }
-            .main-header.nav-open .main-nav { right: 0; }
-            .main-nav ul { flex-direction: column; padding: 0; width: 100%; }
-            .main-nav a { display: block; padding: 1.2rem 2rem; border-bottom: 1px solid var(--light-color); width: 100%; font-size: 1.1rem; }
-            .nav-toggle { display: block; }
+            /* Landing Page Mobile */
+            .main-nav { position: fixed; top: 0; right: -100%; width: 80%; height: 100vh; background: #fff; z-index: 1001; padding-top: 5rem; transition: 0.3s; }
+            .main-nav.open { right: 0; }
+            .main-nav ul { flex-direction: column; padding: 0 2rem; }
+            .nav-toggle { display: block; z-index: 1002; }
+            .feature-row, .feature-row:nth-child(even) { flex-direction: column; text-align: center; }
+            .feature-icon-box { width: 100%; height: 200px; flex: none; font-size: 5rem; }
             
-            /* On mobile, stack 3D cards but keep the effect */
-            .cards-3d-container { flex-direction: column; align-items: center; }
-            .card-3d { width: 100%; max-width: 350px; }
-            .card-3d:nth-child(even) { transform: rotateX(2deg) rotateY(2deg); } /* Reset alternating tilt for mobile vertical stack */
-            
-            .whatsapp-btn { width: 50px; height: 50px; font-size: 1.5rem; bottom: 1.5rem; left: 1.5rem; }
-            .back-to-top { width: 45px; height: 45px; bottom: 1.5rem; right: 1.5rem; }
+            /* Admin Mobile */
+            .admin-sidebar { position: fixed; left: -100%; height: 100%; z-index: 200; }
+            .admin-sidebar.active { left: 0; }
+            .admin-main { padding: 1rem; }
+            .mobile-toggle { display: block !important; font-size: 1.5rem; cursor: pointer; color: var(--primary-color); }
         }
-
-        @media (max-width: 576px) {
-            section { padding: 4rem 0; }
-            h1 { font-size: 2.2rem; }
-            h2 { font-size: 1.8rem; }
-            .btn { width: 100%; margin-bottom: 10px; }
-            .grid-responsive { grid-template-columns: 1fr; }
-        }
+        .mobile-toggle { display: none; }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader-wrapper">
-        <div class="loader">
-            <div class="loader-logo">JENGA<span>FLOW</span></div>
-            <div class="loader-bar">
-                <div class="loader-progress"></div>
-            </div>
-        </div>
-    </div>
 
-    <!-- Header -->
-    <header class="main-header">
-        <div class="container">
-            <a href="#hero" class="logo">JENGA<span>FLOW</span></a>
-            <nav class="main-nav">
-                <ul>
-                    <li><a href="#problem">Problem</a></li>
-                    <li><a href="#solution">Solution</a></li>
-                    <li><a href="#ecosystem">Ecosystem</a></li>
-                    <li><a href="#patent">Patent</a></li>
-                    <li><a href="#team">Team</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                    <li><a href="#the-ask">Invest</a></li>
-                    <li><a href="#admin-dashboard-section" style="color:var(--accent-color)"><i class="fas fa-lock"></i> Admin</a></li>
-                </ul>
-            </nav>
-            <button class="nav-toggle" id="nav-toggle"><i class="fas fa-bars"></i></button>
-        </div>
-    </header>
-
-    <main>
-        <!-- Hero Section -->
-        <section id="hero">
+    <!-- =========================================
+         LANDING PAGE VIEW
+         ========================================= -->
+    <div id="landing-view">
+        <!-- Header -->
+        <header class="main-header">
             <div class="container">
-                <h1 class="animate-on-scroll slide-in-bottom">Powering the Construction Revolution</h1>
-                <p class="animate-on-scroll slide-in-bottom">Connecting workers, developers, materials, finance & AI planning in real-time. One platform instead of chaos.</p>
-                <div class="animate-on-scroll slide-in-bottom">
+                <a href="#" class="logo">JENGA<span>FLOW</span></a>
+                <nav class="main-nav" id="main-nav">
+                    <ul>
+                        <li><a href="#problem">Problem</a></li>
+                        <li><a href="#solution">Solution</a></li>
+                        <li><a href="#ecosystem">Ecosystem</a></li>
+                        <li><a href="#team">Team</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#the-ask">Invest</a></li>
+                        <!-- Link to Admin View -->
+                        <li><a href="#" onclick="showAdmin()" style="color:var(--accent-color);"><i class="fas fa-lock"></i> Admin</a></li>
+                    </ul>
+                </nav>
+                <button class="nav-toggle" id="nav-toggle"><i class="fas fa-bars"></i></button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Hero -->
+            <section id="hero">
+                <div class="container">
+                    <h1>Powering Construction Revolution</h1>
+                    <p style="font-size: 1.25rem; margin: 2rem 0; opacity: 0.9;">Connecting workers, developers, materials, finance & AI planning in real-time.</p>
                     <a href="#the-ask" class="btn">Join the Revolution</a>
                     <a href="#solution" class="btn btn-outline">Learn More</a>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Problem Section (3D Straight Line) -->
-        <section id="problem" class="container">
-            <h2 class="animate-on-scroll slide-in-bottom">The Problem</h2>
-            <p class="section-subtitle animate-on-scroll slide-in-bottom">Construction today is broken and inefficient. This leads to costly and dangerous outcomes.</p>
+            <!-- Problem Section -->
+            <section id="problem" class="container section-padding">
+                <h2 class="section-title">The Problem</h2>
+                <p class="section-subtitle">Construction today is broken. These challenges cost developers billions and leave workers vulnerable.</p>
+                <div class="problem-wrapper">
+                    <div class="feature-row">
+                        <div class="feature-icon-box">🔍</div>
+                        <div class="feature-content">
+                            <h3>Lack of Transparency</h3>
+                            <p>Developers often have no real-time visibility into site progress, material usage, or labor allocation. This opacity leads to mistrust, disputes, and stalled projects.</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-icon-box">💼</div>
+                        <div class="feature-content">
+                            <h3>Inefficient Labor Access</h3>
+                            <p>Skilled workers struggle to find consistent work, while developers cannot verify the quality or availability of labor on remote sites efficiently.</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-icon-box">📉</div>
+                        <div class="feature-content">
+                            <h3>Zero Accountability</h3>
+                            <p>Without a unified rating system, fraudulent contractors and substandard work proliferate. There is no mechanism to track historical performance or reputation.</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-icon-box">📈</div>
+                        <div class="feature-content">
+                            <h3>Fragmented Processes</h3>
+                            <p>Planning, procurement, and financing are handled in silos using disconnected tools. This fragmentation causes delays, budget overruns, and administrative chaos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Solution Section -->
+            <section id="solution" class="container section-padding">
+                <h2 class="section-title">The Solution – Jengaflow</h2>
+                <p class="section-subtitle">A unified ecosystem bringing transparency, efficiency, and intelligence to construction.</p>
+                <div class="solution-wrapper">
+                    <div class="feature-row">
+                        <div class="feature-icon-box">🗺️</div>
+                        <div class="feature-content">
+                            <h3>Site & Labor Management</h3>
+                            <p>Map ongoing sites, track labor in real-time, and match workers to open slots instantly. Developers see who is on-site; workers find jobs nearby.</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-icon-box">🤖</div>
+                        <div class="feature-content">
+                            <h3>Jengaflow AI Architect</h3>
+                            <p>Generate professional architectural plans, flowcharts, and 3D visualizations in minutes using our proprietary AI. Reduce planning time from weeks to hours.</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-icon-box">⭐</div>
+                        <div class="feature-content">
+                            <h3>Trust & Rating System</h3>
+                            <p>A decentralized review system where contractors, engineers, and fundis are rated based on completed projects. Build your reputation, access premium jobs.</p>
+                        </div>
+                    </div>
+                    <div class="feature-row">
+                        <div class="feature-icon-box">💰</div>
+                        <div class="feature-content">
+                            <h3>Financial Tracking</h3>
+                            <p>Transparent budget monitoring and automated procurement tracking. Ensure every shilling is accounted for and eliminate fraud through smart auditing.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
             
-            <div class="problem-wrapper cards-3d-container">
-                <div class="card-3d animate-on-scroll slide-in-left stagger-1">
-                    <div class="card-icon-3d">🔍</div>
-                    <h3>Lack of Transparency</h3>
-                    <p>No real-time tracking of site progress, finances, or procurement leads to mistrust.</p>
+            <!-- Ecosystem -->
+            <section id="ecosystem" class="section-padding">
+                <div class="container">
+                    <h2 class="section-title" style="color: #fff;">The Ecosystem</h2>
+                    <p class="section-subtitle" style="color: #e0e0e0;">Connecting construction to real estate and markets.</p>
+                    <div class="eco-grid">
+                        <div class="eco-card">
+                            <i class="fas fa-home"></i>
+                            <h3>Find a House</h3>
+                            <p>Listings verified by construction data for quality assurance.</p>
+                        </div>
+                        <div class="eco-card">
+                            <i class="fas fa-store"></i>
+                            <h3>Material Markets</h3>
+                            <p>Real-time price comparison for construction materials.</p>
+                        </div>
+                        <div class="eco-card">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <h3>Land Listings</h3>
+                            <p>Direct connection between landowners and developers.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-3d animate-on-scroll slide-in-bottom stagger-2">
-                    <div class="card-icon-3d">💼</div>
-                    <h3>Inefficient Job Access</h3>
-                    <p>No mechanism for workers to find jobs on remote sites efficiently.</p>
-                </div>
-                <div class="card-3d animate-on-scroll slide-in-right stagger-3">
-                    <div class="card-icon-3d">📉</div>
-                    <h3>No Accountability</h3>
-                    <p>Poor rating systems lead to low quality work and fraud.</p>
-                </div>
-                <div class="card-3d animate-on-scroll slide-in-left stagger-4">
-                    <div class="card-icon-3d">📈</div>
-                    <h3>Costly Planning</h3>
-                    <p>Architectural and planning services are slow and expensive.</p>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Solution Section -->
-        <section id="solution" class="container">
-            <h2 class="animate-on-scroll slide-in-bottom">The Solution – Jengaflow</h2>
-            <p class="section-subtitle animate-on-scroll slide-in-bottom">An all-in-one construction management platform that brings the entire ecosystem into one seamless, transparent, and efficient digital space.</p>
-            
-            <div class="solution-wrapper cards-3d-container">
-                <div class="card-3d animate-on-scroll slide-in-left stagger-1">
-                    <div class="card-icon-3d">🗺️</div>
-                    <h3>Site & Labour</h3>
-                    <p>Map ongoing construction sites and show real-time labour size & open slots.</p>
+            <!-- Market Opportunity -->
+            <section id="market-opportunity" class="section-padding">
+                <div class="container">
+                    <h2 class="section-title" style="color: #fff;">Market Opportunity</h2>
+                    <p class="section-subtitle" style="color: #e0e0e0;">The Kenyan construction sector is ripe for digital disruption.</p>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <h3>KES 2.5T</h3>
+                            <p>Annual Market Value</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>1.5M+</h3>
+                            <p>Skilled Workers</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>40K+</h3>
+                            <p>Active Developers</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>0%</h3>
+                            <p>Digital Adoption</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-3d animate-on-scroll slide-in-bottom stagger-2">
-                    <div class="card-icon-3d">📊</div>
-                    <h3>Dashboard</h3>
-                    <p>Live tracking of timelines, budgets & materials.</p>
+            </section>
+
+            <!-- Business Model -->
+            <section id="business-model" class="container section-padding" style="background: var(--light-bg); border-radius: 20px;">
+                <h2 class="section-title">Business Model</h2>
+                <p class="section-subtitle">Sustainable revenue streams.</p>
+                <div class="revenue-streams">
+                    <span class="revenue-tag">💳 Subscriptions</span>
+                    <span class="revenue-tag">🤖 AI Tools</span>
+                    <span class="revenue-tag">💼 Job Commission</span>
+                    <span class="revenue-tag">📢 Featured Ads</span>
+                    <span class="revenue-tag">🔄 Transaction Fees</span>
                 </div>
-                <div class="card-3d animate-on-scroll slide-in-right stagger-3">
-                    <div class="card-icon-3d">🤖</div>
-                    <h3>Jengaflow AI</h3>
-                    <p>Auto-generate professional flow plans and architectural designs in minutes.</p>
+            </section>
+
+            <!-- Patent -->
+            <section id="patent" class="container section-padding">
+                <h2 class="section-title">Patent Information</h2>
+                <div class="patent-box">
+                    <p><strong>Provisional Patent Application:</strong> Construction Sector Management System and Method Thereof</p>
+                    <p><strong>Applicants:</strong> Meru University of Science and Technology and Bonface Kinyanjui Wanjiku</p>
+                    <p><strong>Inventor:</strong> Bonface Kinyanjui Wanjiku</p>
+                    <p><strong>Date Filed:</strong> January 3, 2025</p>
                 </div>
-                <div class="card-3d animate-on-scroll slide-in-left stagger-4">
-                    <div class="card-icon-3d">⭐</div>
-                    <h3>Ratings & Trust</h3>
-                    <p>Rate contractors, engineers & fundis based on real projects.</p>
+            </section>
+
+            <!-- Team -->
+            <section id="team" class="container section-padding" style="background: var(--light-bg); border-radius: 20px; margin-bottom: 4rem;">
+                <h2 class="section-title">Meet Our Team</h2>
+                <p class="section-subtitle">The visionaries behind Jengaflow.</p>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="team-avatar">BK</div>
+                        <h3>Bonface K. Wanjiku</h3>
+                        <p style="color: var(--accent-color); font-weight: 600;">Founder & CEO</p>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar" style="background: var(--secondary-color);">VM</div>
+                        <h3>Vincent Muthiani</h3>
+                        <p style="color: var(--secondary-color); font-weight: 600;">Backend Developer</p>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar" style="background: var(--accent-color);">PM</div>
+                        <h3>Philip Muuo</h3>
+                        <p style="color: var(--accent-color); font-weight: 600;">Frontend Developer</p>
+                    </div>
                 </div>
-                <div class="card-3d animate-on-scroll slide-in-right stagger-5">
-                    <div class="card-icon-3d">💰</div>
-                    <h3>Financial Tracking</h3>
-                    <p>Promote financial & procurement transparency.</p>
+            </section>
+
+            <!-- FAQ -->
+            <section id="faq" class="container section-padding">
+                <h2 class="section-title">FAQ</h2>
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div class="faq-item">
+                        <div class="faq-question">How does Jengaflow ensure data security? <i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>We use industry-standard encryption and strict access controls to protect all project data.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Is Jengaflow available outside Kenya? <i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Our initial focus is Kenya, with plans to expand across East Africa and globally.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How does the AI planning work? <i class="fas fa-chevron-down"></i></div>
+                        <div class="faq-answer"><p>Our AI analyzes inputs to generate optimized architectural designs and flow plans instantly.</p></div>
+                    </div>
                 </div>
-            </div>
-        </section>
-        
-        <!-- Ecosystem Section -->
-        <section id="ecosystem">
+            </section>
+
+            <!-- The Ask -->
+            <section id="the-ask" class="section-padding">
+                <div class="container">
+                    <h2 class="section-title" style="color: #fff;">Angel Investment</h2>
+                    <p>Help us build the MVP and launch the revolution.</p>
+                    <div class="ask-box">
+                        <h3 style="text-align: center; margin-bottom: 1rem;">Use of Funds</h3>
+                        <ul>
+                            <li><i class="fas fa-check" style="color: var(--accent-color); margin-right: 10px;"></i> Build core MVP modules</li>
+                            <li><i class="fas fa-check" style="color: var(--accent-color); margin-right: 10px;"></i> Acquire necessary tools & hardware</li>
+                            <li><i class="fas fa-check" style="color: var(--accent-color); margin-right: 10px;"></i> Assemble technical team</li>
+                            <li><i class="fas fa-check" style="color: var(--accent-color); margin-right: 10px;"></i> Pilot on real sites</li>
+                        </ul>
+                    </div>
+                    <a href="mailto:wanjikubonfacefx@gmail.com" class="btn">Contact Founder</a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
             <div class="container">
-                <h2 class="animate-on-scroll slide-in-bottom">The Ecosystem</h2>
-                <p class="section-subtitle animate-on-scroll slide-in-bottom">Jengaflow integrates into housing, real estate, and supply chains, creating a comprehensive market.</p>
-                <div class="cards-3d-container" style="perspective: none;"> <!-- Reset perspective for ecosystem to keep it simple -->
-                    <div class="ecosystem-item animate-on-scroll slide-in-left stagger-1">
-                        <div class="icon">🏡</div>
-                        <h3>Find a House</h3>
-                        <p>Rental listings linked to verified construction data.</p>
+                <div class="footer-grid">
+                    <div>
+                        <h3 style="color: var(--accent-color);">Jengaflow</h3>
+                        <p>Powering the construction revolution through technology, transparency, and efficiency.</p>
                     </div>
-                    <div class="ecosystem-item animate-on-scroll slide-in-bottom stagger-2">
-                        <div class="icon">🏗️</div>
-                        <h3>Jengaflow Markets</h3>
-                        <p>Remote scanning of construction material markets.</p>
+                    <div>
+                        <h3 style="color: var(--accent-color);">Quick Links</h3>
+                        <ul>
+                            <li><a href="#problem" style="color: #bbb; display:block; margin-bottom: 5px;">Problem</a></li>
+                            <li><a href="#solution" style="color: #bbb; display:block; margin-bottom: 5px;">Solution</a></li>
+                            <li><a href="#patent" style="color: #bbb; display:block; margin-bottom: 5px;">Patent</a></li>
+                        </ul>
                     </div>
-                    <div class="ecosystem-item animate-on-scroll slide-in-right stagger-3">
-                        <div class="icon">📍</div>
-                        <h3>List Your Land</h3>
-                        <p>Agencies and land owners can directly list their land.</p>
+                    <div>
+                        <h3 style="color: var(--accent-color);">Contact</h3>
+                        <ul>
+                            <li><a href="mailto:wanjikubonfacefx@gmail.com" style="color: #bbb; display:block; margin-bottom: 5px;">wanjikubonfacefx@gmail.com</a></li>
+                            <li><a href="tel:+254718868880" style="color: #bbb; display:block; margin-bottom: 5px;">+254 718 868 880</a></li>
+                        </ul>
                     </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Jengaflow. All Rights Reserved.</p>
                 </div>
             </div>
-        </section>
+        </footer>
 
-        <!-- Market Opportunity Section -->
-        <section id="market-opportunity">
-            <div class="container">
-                <h2 class="animate-on-scroll slide-in-bottom">Market Opportunity</h2>
-                <p class="section-subtitle animate-on-scroll slide-in-bottom">The Kenyan construction sector is ripe for digital disruption.</p>
-                <div class="stats-grid">
-                    <div class="stat-item animate-on-scroll slide-in-left stagger-1">
-                        <div class="number">KES 2.5T</div>
-                        <div class="label">Market Value (Annually)</div>
-                    </div>
-                    <div class="stat-item animate-on-scroll slide-in-bottom stagger-2">
-                        <div class="number">1.5M+</div>
-                        <div class="label">Skilled Workers</div>
-                    </div>
-                    <div class="stat-item animate-on-scroll slide-in-right stagger-3">
-                        <div class="number">40,000+</div>
-                        <div class="label">Active Developers</div>
-                    </div>
-                    <div class="stat-item animate-on-scroll slide-in-left stagger-4">
-                        <div class="number">0%</div>
-                        <div class="label">Digital Adoption</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Business Model Section -->
-        <section id="business-model" class="container">
-            <h2 class="animate-on-scroll slide-in-bottom">Business Model</h2>
-            <p class="section-subtitle animate-on-scroll slide-in-bottom">Multiple revenue streams ensure sustainable growth.</p>
-            <div class="revenue-streams">
-                <span class="revenue-stream animate-on-scroll stagger-1"><span>💳 Subscriptions</span></span>
-                <span class="revenue-stream animate-on-scroll stagger-2"><span>🤖 AI Planning Tools</span></span>
-                <span class="revenue-stream animate-on-scroll stagger-3"><span>💼 Job Commission</span></span>
-                <span class="revenue-stream animate-on-scroll stagger-4"><span>📢 Featured Ads</span></span>
-                <span class="revenue-stream animate-on-scroll stagger-5"><span>🔄 Transaction Fees</span></span>
-            </div>
-        </section>
-
-        <!-- Patent Information Section -->
-        <section id="patent" class="container">
-            <h2 class="animate-on-scroll slide-in-bottom">Patent Information</h2>
-            <p class="section-subtitle animate-on-scroll slide-in-bottom">Our innovative approach is protected by intellectual property.</p>
-            <div class="patent-content animate-on-scroll slide-in-right">
-                <p><span class="patent-number">Provisional Patent Application:</span> Construction Sector Management System and Method Thereof</p>
-                <p><span class="patent-number">Applicants:</span> Meru University of Science and Technology and Bonface Kinyanjui Wanjiku</p>
-                <p><span class="patent-number">Inventor:</span> Bonface Kinyanjui Wanjiku</p>
-                <p><span class="patent-number">Date Filed:</span> January 3, 2025</p>
-            </div>
-        </section>
-
-        <!-- Team Section -->
-        <section id="team" class="container">
-            <h2 class="animate-on-scroll slide-in-bottom">Meet Our Team</h2>
-            <p class="section-subtitle animate-on-scroll slide-in-bottom">The visionaries behind Jengaflow's construction revolution.</p>
-            <div class="team-grid">
-                <div class="team-member animate-on-scroll slide-in-left">
-                    <div class="team-avatar">BK</div>
-                    <h3>Bonface K. Wanjiku</h3>
-                    <p class="role">Founder & CEO</p>
-                </div>
-                <div class="team-member animate-on-scroll slide-in-bottom">
-                    <div class="team-avatar">VM</div>
-                    <h3>Vincent Muthiani</h3>
-                    <p class="role">Backend Developer</p>
-                </div>
-                <div class="team-member animate-on-scroll slide-in-right">
-                    <div class="team-avatar">PM</div>
-                    <h3>Philip Muuo</h3>
-                    <p class="role">Frontend Developer</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section id="faq" class="container">
-            <h2 class="animate-on-scroll slide-in-bottom">FAQ</h2>
-            <p class="section-subtitle animate-on-scroll slide-in-bottom">Answers to common questions about Jengaflow.</p>
-            <div class="faq-container">
-                <div class="faq-item animate-on-scroll slide-in-left">
-                    <div class="faq-question">
-                        <span>How does Jengaflow ensure data security?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Jengaflow uses industry-standard encryption and security protocols to protect all user data. We also implement strict access controls and regular security audits.</p>
-                    </div>
-                </div>
-                <div class="faq-item animate-on-scroll slide-in-right">
-                    <div class="faq-question">
-                        <span>Is Jengaflow available outside of Kenya?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>While our initial focus is on the Kenyan market, we plan to expand to other East African countries and eventually globally.</p>
-                    </div>
-                </div>
-                <div class="faq-item animate-on-scroll slide-in-left">
-                    <div class="faq-question">
-                        <span>How does the AI planning feature work?</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Our AI planning tool uses machine learning algorithms to analyze project requirements and generate optimized construction plans.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- The Ask Section -->
-        <section id="the-ask">
-            <div class="container">
-                <h2 class="animate-on-scroll slide-in-bottom">The Ask: Angel Investment</h2>
-                <p class="animate-on-scroll slide-in-bottom">We are seeking angel investment to build our MVP and launch Jengaflow.</p>
-                <div class="ask-details animate-on-scroll slide-in-bottom">
-                    <h3 style="text-align: center; margin-bottom: 1.5rem;">Use of Funds</h3>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> Build core MVP modules</li>
-                        <li><i class="fas fa-check-circle"></i> Acquire necessary machines & tools</li>
-                        <li><i class="fas fa-check-circle"></i> Assemble technical & industry collaborators</li>
-                        <li><i class="fas fa-check-circle"></i> Pilot on real construction sites</li>
-                    </ul>
-                </div>
-                <div class="animate-on-scroll slide-in-bottom">
-                    <a href="mailto:wanjikubonfacefx@gmail.com" class="btn" style="margin-top: 2rem;">Contact Founder</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- SUPER ADMIN DASHBOARD SECTION -->
-        <section id="admin-dashboard-section">
-            <div class="admin-layout">
-                <!-- Sidebar -->
-                <div class="admin-sidebar">
-                    <h3>Jengaflow Admin</h3>
-                    <ul class="admin-menu">
-                        <li><a href="#" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                        <li><a href="#"><i class="fas fa-users"></i> Users</a></li>
-                        <li><a href="#"><i class="fas fa-hard-hat"></i> Projects</a></li>
-                        <li><a href="#"><i class="fas fa-file-invoice-dollar"></i> Transactions</a></li>
-                        <li><a href="#"><i class="fas fa-chart-pie"></i> Analytics</a></li>
-                        <li><a href="#" style="margin-top: 2rem; color: #ffcccc;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
-                </div>
-
-                <!-- Content -->
-                <div class="admin-content">
-                    <div class="admin-header">
-                        <div>
-                            <h2>Overview</h2>
-                            <p style="color: var(--grey-color);">Welcome back, Super Admin.</p>
-                        </div>
-                        <div style="position: relative;">
-                            <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--grey-color); cursor: pointer;"></i>
-                            <span style="position: absolute; top: -5px; right: -5px; background: var(--accent-color); width: 10px; height: 10px; border-radius: 50%;"></span>
-                        </div>
-                    </div>
-
-                    <div class="admin-cards-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon bg-blue"><i class="fas fa-users"></i></div>
-                            <div class="stat-info">
-                                <h4>Total Users</h4>
-                                <span>12,450</span>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon bg-orange"><i class="fas fa-hard-hat"></i></div>
-                            <div class="stat-info">
-                                <h4>Active Projects</h4>
-                                <span>342</span>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon bg-green"><i class="fas fa-wallet"></i></div>
-                            <div class="stat-info">
-                                <h4>Revenue</h4>
-                                <span>KES 4.5M</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3 style="margin-bottom: 1rem;">Recent Projects</h3>
-                    <div class="table-responsive">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>Project ID</th>
-                                    <th>Developer</th>
-                                    <th>Location</th>
-                                    <th>Status</th>
-                                    <th>Budget</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#JF-2025</td>
-                                    <td>Bonface W.</td>
-                                    <td>Nairobi, Westlands</td>
-                                    <td><span class="status-badge status-active">Active</span></td>
-                                    <td>KES 5.2M</td>
-                                </tr>
-                                <tr>
-                                    <td>#JF-2024</td>
-                                    <td>Sarah K.</td>
-                                    <td>Mombasa, Nyali</td>
-                                    <td><span class="status-badge status-pending">Pending</span></td>
-                                    <td>KES 12M</td>
-                                </tr>
-                                <tr>
-                                    <td>#JF-2023</td>
-                                    <td>James O.</td>
-                                    <td>Kisumu, Milimani</td>
-                                    <td><span class="status-badge status-active">Active</span></td>
-                                    <td>KES 8.1M</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Jengaflow</h3>
-                    <p>Powering the construction revolution through technology, transparency, and efficiency.</p>
-                </div>
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#problem">The Problem</a></li>
-                        <li><a href="#solution">The Solution</a></li>
-                        <li><a href="#ecosystem">Ecosystem</a></li>
-                        <li><a href="#patent">Patent</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Contact</h3>
-                    <ul>
-                        <li><a href="mailto:wanjikubonfacefx@gmail.com">wanjikubonfacefx@gmail.com</a></li>
-                        <li><a href="tel:+254718868880">+254 718 868 880</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Follow Us</h3>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Jengaflow. All Rights Reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/254718868880" class="whatsapp-btn" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <!-- Back to Top Button -->
-    <div class="back-to-top" id="back-to-top">
-        <i class="fas fa-arrow-up"></i>
+        <!-- Floating Buttons -->
+        <a href="https://wa.me/254718868880" class="whatsapp-btn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <div class="back-to-top" id="back-to-top"><i class="fas fa-arrow-up"></i></div>
     </div>
 
+    <!-- =========================================
+         ADMIN DASHBOARD VIEW
+         ========================================= -->
+    <div id="admin-view" class="admin-layout">
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="admin-brand">JENGA<span>FLOW</span></div>
+            <ul class="admin-menu">
+                <li class="admin-menu-item active" onclick="activateAdminItem(this)">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </li>
+                <li class="admin-menu-item" onclick="activateAdminItem(this)">
+                    <i class="fas fa-users"></i> Users
+                </li>
+                <li class="admin-menu-item" onclick="activateAdminItem(this)">
+                    <i class="fas fa-hard-hat"></i> Projects
+                </li>
+                <li class="admin-menu-item" onclick="activateAdminItem(this)">
+                    <i class="fas fa-file-invoice-dollar"></i> Transactions
+                </li>
+                <li class="admin-menu-item" onclick="activateAdminItem(this)">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </li>
+                <li class="admin-menu-item" onclick="activateAdminItem(this)">
+                    <i class="fas fa-cog"></i> Settings
+                </li>
+            </ul>
+            <div class="admin-footer">
+                <!-- Link back to Landing Page -->
+                <button class="logout-btn" onclick="showLanding()">
+                    <i class="fas fa-arrow-left"></i> Back to Site
+                </button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <i class="fas fa-bars mobile-toggle" onclick="toggleAdminSidebar()"></i>
+                    <h2>Admin Dashboard</h2>
+                </div>
+                <div class="user-profile">
+                    <span>Welcome, <strong>Super Admin</strong></span>
+                    <div class="user-avatar">SA</div>
+                </div>
+            </header>
+
+            <!-- Stats Grid -->
+            <section class="stats-grid">
+                <div class="stat-card" style="border-bottom-color: #007bff;">
+                    <div class="stat-icon" style="background: #e7f1ff; color: #007bff;"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <h4>Total Users</h4>
+                        <h3>12,450</h3>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-bottom-color: var(--accent-color);">
+                    <div class="stat-icon" style="background: #fff3cd; color: var(--accent-color);"><i class="fas fa-hard-hat"></i></div>
+                    <div class="stat-info">
+                        <h4>Active Projects</h4>
+                        <h3>342</h3>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-bottom-color: #28a745;">
+                    <div class="stat-icon" style="background: #d4edda; color: #28a745;"><i class="fas fa-wallet"></i></div>
+                    <div class="stat-info">
+                        <h4>Revenue</h4>
+                        <h3>KES 4.5M</h3>
+                    </div>
+                </div>
+                <div class="stat-card" style="border-bottom-color: #dc3545;">
+                    <div class="stat-icon" style="background: #f8d7da; color: #dc3545;"><i class="fas fa-exclamation-triangle"></i></div>
+                    <div class="stat-info">
+                        <h4>Pending Issues</h4>
+                        <h3>12</h3>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Projects Table -->
+            <section class="content-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="color: var(--primary-color);">Recent Projects</h3>
+                    <button style="padding: 8px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">View All</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Project Name</th>
+                                <th>Developer</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Budget</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#JF-2025</td>
+                                <td>Westlands Apt</td>
+                                <td>Bonface W.</td>
+                                <td>Nairobi</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>KES 5.2M</td>
+                                <td>
+                                    <button style="border:none; background:none; color:var(--primary-color); cursor:pointer;"><i class="fas fa-edit"></i></button>
+                                    <button style="border:none; background:none; color:#dc3545; cursor:pointer; margin-left:10px;"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#JF-2024</td>
+                                <td>Nyali Resort</td>
+                                <td>Sarah K.</td>
+                                <td>Mombasa</td>
+                                <td><span class="badge badge-warning">Pending</span></td>
+                                <td>KES 12M</td>
+                                <td>
+                                    <button style="border:none; background:none; color:var(--primary-color); cursor:pointer;"><i class="fas fa-edit"></i></button>
+                                    <button style="border:none; background:none; color:#dc3545; cursor:pointer; margin-left:10px;"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#JF-2023</td>
+                                <td>Milimani Mall</td>
+                                <td>James O.</td>
+                                <td>Kisumu</td>
+                                <td><span class="badge badge-danger">Delayed</span></td>
+                                <td>KES 8.1M</td>
+                                <td>
+                                    <button style="border:none; background:none; color:var(--primary-color); cursor:pointer;"><i class="fas fa-edit"></i></button>
+                                    <button style="border:none; background:none; color:#dc3545; cursor:pointer; margin-left:10px;"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- =========================================
+         JAVASCRIPT
+         ========================================= -->
     <script>
-        // Loading Screen
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.querySelector('.loader-wrapper').style.opacity = '0';
-                setTimeout(() => {
-                    document.querySelector('.loader-wrapper').style.display = 'none';
-                }, 500);
-            }, 1500);
-        });
+        // =======================
+        // View Switching Logic
+        // =======================
+        const landingView = document.getElementById('landing-view');
+        const adminView = document.getElementById('admin-view');
 
-        // Mobile Navigation
+        function showAdmin() {
+            landingView.style.display = 'none';
+            adminView.style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
+        function showLanding() {
+            adminView.style.display = 'none';
+            landingView.style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        // =======================
+        // Landing Page Scripts
+        // =======================
+        
+        // Mobile Nav Toggle
         const navToggle = document.getElementById('nav-toggle');
-        const mainHeader = document.querySelector('.main-header');
-        const navLinks = document.querySelectorAll('.main-nav a');
-
+        const mainNav = document.getElementById('main-nav');
+        
         navToggle.addEventListener('click', () => {
-            mainHeader.classList.toggle('nav-open');
+            mainNav.classList.toggle('open');
             const icon = navToggle.querySelector('i');
-            if (mainHeader.classList.contains('nav-open')) {
+            if(mainNav.classList.contains('open')){
                 icon.classList.remove('fa-bars');
                 icon.classList.add('fa-times');
             } else {
@@ -1186,49 +689,42 @@
             }
         });
 
-        navLinks.forEach(link => {
+        // Close mobile menu when link clicked
+        document.querySelectorAll('.main-nav a').forEach(link => {
             link.addEventListener('click', () => {
-                mainHeader.classList.remove('nav-open');
-                const icon = navToggle.querySelector('i');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
+                mainNav.classList.remove('open');
+                navToggle.querySelector('i').classList.remove('fa-times');
+                navToggle.querySelector('i').classList.add('fa-bars');
             });
         });
 
-        // Scroll-triggered Animations
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        animatedElements.forEach(element => { observer.observe(element); });
-
         // FAQ Accordion
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            question.addEventListener('click', () => {
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item) otherItem.classList.remove('active');
-                });
-                item.classList.toggle('active');
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                q.parentElement.classList.toggle('active');
             });
         });
 
         // Back to Top
-        const backToTopBtn = document.getElementById('back-to-top');
+        const backToTop = document.getElementById('back-to-top');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) backToTopBtn.classList.add('show');
-            else backToTopBtn.classList.remove('show');
+            if(window.scrollY > 300) backToTop.classList.add('show');
+            else backToTop.classList.remove('show');
         });
-        
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        backToTop.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
+
+        // =======================
+        // Admin Dashboard Scripts
+        // =======================
+        function toggleAdminSidebar() {
+            document.getElementById('admin-sidebar').classList.toggle('active');
+        }
+
+        function activateAdminItem(element) {
+            const items = document.querySelectorAll('.admin-menu-item');
+            items.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
     </script>
 </body>
 </html>
